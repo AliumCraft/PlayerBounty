@@ -1,0 +1,29 @@
+#Paintball Config File
+Lobby:
+  X: 0
+  Y: 63
+  Z: 0
+
+#For this section, anything that is set to true is disabled.
+Damage:
+  Fall: true
+  Drown: true
+  Suffocation: true
+  Contact: true
+  
+#Here you will be able to change sign formatting
+Signs:
+  Lobby:
+    Line-1: '[&1Paintball&0]'
+    Line-2: '%amount%'
+    Line-3: '%map%'
+    Line-4: '&0Click to join.'
+
+#Here you can change all the messages in this plugin.
+Messages:
+  Sign-created: '&b&lPaintball &6&l>> &eSign created!'
+  
+#Here you can set the default settings for each arena.
+Arena:
+  min-players: 2
+  max-players: 16
