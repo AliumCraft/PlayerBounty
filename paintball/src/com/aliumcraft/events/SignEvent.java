@@ -1,9 +1,8 @@
 package com.aliumcraft.events;
 
 import java.util.HashMap;
-import java.util.List;
-
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
@@ -11,7 +10,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -31,13 +29,10 @@ public class SignEvent implements Listener {
 	
 	HashMap<Integer,Integer> signSlotsUsed = new HashMap<Integer,Integer>();
 	
-	
-	
 	public SignEvent(Main is) {
 		this.plugin = is;
 	}
 	
-		
 	@EventHandler
 	public void onSignChange(SignChangeEvent e) {
 		
@@ -55,16 +50,13 @@ public class SignEvent implements Listener {
         	p.sendMessage("Sign updated");      	
         }
 
-       
-        
-        
     }
 	
 	public void afterSignCreation (BlockPlaceEvent e)
 	{
 		Player p = e.getPlayer();
 		BlockState thisSign = e.getBlockPlaced().getState();
-		System.out.println(":-----------------------------------------------: BLCK EVENT!");
+		System.out.println(":-----------------------------------------------: BLOCK EVENT!");
 		thisSign.update(true);
         if(!signIsValid(thisSign))return;
         
@@ -122,6 +114,7 @@ public class SignEvent implements Listener {
 						else
 						{
 							p.sendMessage("Adding a player :D");
+							signTeleportToMapLimbo(thisSign, p);
 						}
 						System.out.print("-------------------------------: CURRENT STATE UPDATE");
 						signUpdateText(s);
@@ -164,7 +157,6 @@ public class SignEvent implements Listener {
 		// but this didn't allow me to tell the difference between already full, and just been filled.
 	
 	}
-
 	public Object signGetMapSetting(BlockState sign,String setting)
 	{
 		Object result;
@@ -185,7 +177,6 @@ public class SignEvent implements Listener {
 		
 		return result;
 	}
-
 	public boolean signEmptyPlayers(BlockState sign)
 	{
 		Sign thisSign = (Sign)sign;
@@ -266,25 +257,10 @@ public class SignEvent implements Listener {
 			return true;
 		}
 	}
-	
 	public boolean signIsValid(BlockState sign)
 	{
-		sign.update(true);
+	
 		Sign thisSign = (Sign)sign;
-		thisSign.update(true); //update the sign to the passed blockstate otherwsie it thinks it's blank?
-		
-    	String line1 = ChatColor.stripColor(thisSign.getLine(0));
-    	String line2 = ChatColor.stripColor(thisSign.getLine(1));
-    	String line3 = ChatColor.stripColor(thisSign.getLine(2));
-    	String line4 = ChatColor.stripColor(thisSign.getLine(3));
-    	
-    	
-    	System.out.println("|-----------------v");
-    	System.out.println("| " + line1);
-    	System.out.println("| " + line2);
-    	System.out.println("| " + line3);
-    	System.out.println("| " + line4);
-    	System.out.println("|-----------------^");
 		
 		String configLine1 = (plugin.getConfig().getString("Signs.Line-1")).replaceAll("&[A-z0-9]","").toLowerCase();
 		String topLine = ChatColor.stripColor(thisSign.getLine(SIGN_HEADING)).toLowerCase();
@@ -296,10 +272,36 @@ public class SignEvent implements Listener {
         	System.out.println("-----------------------------: Paintball sign clicked");
         	return true;
         }
-        	System.out.println("-----------------------------: Standard  sign clicked");
+        	
         return false;
     }
-	
+	public void signTeleportToMapLimbo(BlockState sign, Player player)//This will teleport the player to the Limbo waiting room for that map
+	{
+		Sign thisSign = (Sign) sign;
+		double limboX;
+		double limboY;
+		double limboZ;
+		Location playerLocation = player.getLocation();
+		
+		String mapName;
+		FileConfiguration config;
+		config = plugin.getConfig();
+		
+		mapName = ChatColor.stripColor(thisSign.getLine(SIGN_MAP));
+		
+		limboX = config.getDouble("Arena.map." + mapName + ".Limbo.x");
+		limboY = config.getDouble("Arena.map." + mapName + ".Limbo.y");
+		limboZ = config.getDouble("Arena.map." + mapName + ".Limbo.z");
+		
+		playerLocation.setX(limboX);
+		playerLocation.setY(limboY);
+		playerLocation.setZ(limboZ);
+		
+		player.teleport(playerLocation);
+		
+		System.out.println("Player Teleported to (" + limboX + " | " + limboY + " | " + limboZ + ")");
+		
+	}
 	public void configCreateEntry(BlockState sign)
 	{
 		FileConfiguration config = plugin.getConfig();
@@ -321,14 +323,8 @@ public class SignEvent implements Listener {
 				minPlayers = players[0];
 				maxPlayers = players[1];	
 			}
-			
-			
 			String pathMap = "Arena.map";
-			
 			String ThisMap = pathMap + "." + signMap;
-			
-			
-			
 			if(config.contains(ThisMap))
 			{
 				//map already exists
@@ -357,5 +353,4 @@ public class SignEvent implements Listener {
 		
 	}
 
-	
 }
