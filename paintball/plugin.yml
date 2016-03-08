@@ -1,0 +1,6 @@
+name: Paintball
+version: 0.1a
+main: com.aliumcraft.Main
+commands:
+  paintball:
+    description: The command builder for the Paintball plugin.
