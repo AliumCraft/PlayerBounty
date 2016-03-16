@@ -1,0 +1,7 @@
+name: PlayerBounty
+version: 1.0
+main: com.aliumcraft.Main
+depend: [Vault]
+commands:
+  bounty:
+    description: The command builder for PlayerBounty plugin.
