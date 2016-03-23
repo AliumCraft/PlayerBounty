@@ -7,9 +7,7 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.PluginManager;
@@ -27,9 +25,10 @@ public class Main extends JavaPlugin implements Listener {
 	public static Permission perms = null;
 	public static Chat chat = null;
 
-	public Config config = new Config(this);
-	public Commands cmd = new Commands(this);
+	private Config config = new Config(this);
+	private Commands cmd = new Commands(this);
 	public BountyList bl = new BountyList(this);
+	private BountyClaim bc = new BountyClaim(this);
 	
 	public void onEnable() {
 		if (!setupEconomy()) {
@@ -44,6 +43,7 @@ public class Main extends JavaPlugin implements Listener {
 		pm.registerEvents(config, this);
 		config.loadMyConfig();
 		pm.registerEvents(bl, this);
+		pm.registerEvents(bc, this);
 
 		getCommand("bounty").setExecutor(cmd);		
 	}
@@ -95,44 +95,5 @@ public class Main extends JavaPlugin implements Listener {
 			item.setItemMeta(meta);
 		}
 		return item;
-	}
-	
-	@EventHandler
-	public void onKillEvent(PlayerDeathEvent e) {
-		Player killed = e.getEntity();
-		Player killer = e.getEntity().getKiller();
-		e.getEntity().getWorld();
-		
-		if(getConfig().contains("Bounties." + killed.getName())) {
-			bountyClaim(killer, killed);
-		}
-	}
-	
-	@SuppressWarnings("deprecation")
-	public void bountyClaim(Player killer, Player killed) {
-		String amount = String.valueOf(getConfig().getDouble("Bounties." + killed.getName()));
-		Double amountD = getConfig().getDouble("Bounties." + killed.getName());
-		List<String> bountyList = getConfig().getStringList("BountyList");
-		
-		if(getConfig().getDouble("Bounties." + killed.getName()) >=
-				getConfig().getDouble("Bounty.Min-Bounty-Kill-Broadcast")) {
-			for(String s : getStrings("Messages.Bounty-Claim")) {
-				bct(ChatColor.translateAlternateColorCodes('&', s)
-						.replace("%amount%", amount)
-						.replace("%player%", killer.getName())
-						.replace("%bounty%", killed.getName()));
-			}
-			msg(killer, getString("Messages.Money-Given")
-					.replace("%amount%", amount));
-		} else {
-			msg(killer, getString("Messages.Money-Given")
-					.replace("%amount%", amount));
-		}
-		econ.depositPlayer(killer.getName(), amountD);
-		
-		getConfig().set("Bounties." + killed.getName(), null);
-		bountyList.remove(killed.getName());
-		getConfig().set("BountyList", bountyList);
-		saveConfig();
-	}
+	}	
 }

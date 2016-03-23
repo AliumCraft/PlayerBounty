@@ -59,10 +59,10 @@ public class Commands implements Listener, CommandExecutor {
 					Player pl = p.getServer().getPlayer(args[1]);
 					
 					if(pl != null) {
-						if(plugin.getConfig().contains("Bounties." + args[1])) {
+						if(plugin.getConfig().contains("Bounties." + pl.getUniqueId())) {
 							plugin.msg(p, plugin.getString("Messages.Bounty-Get")
 									.replace("%bounty%", pl.getName())
-									.replace("%amount%", plugin.getString("Bounties." + args[1])));
+									.replace("%amount%", plugin.getString("Bounties." + pl.getUniqueId())));
 						} else {
 							plugin.msg(p, plugin.getString("Messages.Bounty-Get-Null")
 									.replace("%bounty%", args[1]));
@@ -104,8 +104,8 @@ public class Commands implements Listener, CommandExecutor {
 										
 										plugin.msg(p, plugin.getString("Messages.Money-Taken")
 												.replace("%amount%", String.valueOf(roundTwoDecimals(Double.valueOf(args[1])))));
-										if(!plugin.getConfig().contains("Bounties." + z.getName())) {
-											plugin.getConfig().set("Bounties." + z.getName(), roundTwoDecimals(Double.valueOf(args[1])));
+										if(!plugin.getConfig().contains("Bounties." + z.getUniqueId())) {
+											plugin.getConfig().set("Bounties." + z.getUniqueId(), roundTwoDecimals(Double.valueOf(args[1])));
 											plugin.saveConfig();
 											
 											plugin.bct(plugin.getString("Messages.Bounty-Set")
@@ -116,7 +116,7 @@ public class Commands implements Listener, CommandExecutor {
 											double addition = Double.parseDouble(args[1]);
 											double sum = current + addition;
 											
-											plugin.getConfig().set("Bounties." + z.getName(), roundTwoDecimals(sum));
+											plugin.getConfig().set("Bounties." + z.getUniqueId(), roundTwoDecimals(sum));
 											plugin.saveConfig();
 											
 											plugin.bct(plugin.getString("Messages.Bounty-Set")

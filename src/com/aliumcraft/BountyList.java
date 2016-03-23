@@ -61,9 +61,11 @@ public class BountyList implements Listener {
                 
                 for (String l : lo) {
                 	if(z != null) {
-                		lore.add(ChatColor.translateAlternateColorCodes('&', l)
-                    			.replace("%amount%", String.valueOf(plugin.getConfig().getDouble("Bounties." + configL.get(x))))
-                    			.replace("%status%", ChatColor.translateAlternateColorCodes('&', "&a&lONLINE")));
+                		if(plugin.getConfig().contains("Bounties." + z.getUniqueId().toString())) {
+                			lore.add(ChatColor.translateAlternateColorCodes('&', l)
+                        			.replace("%amount%", String.valueOf(plugin.getConfig().getDouble("Bounties." + z.getUniqueId())))
+                        			.replace("%status%", ChatColor.translateAlternateColorCodes('&', "&a&lONLINE")));
+                		}
                 	} else {
                 		lore.add(ChatColor.translateAlternateColorCodes('&', l)
                     			.replace("%amount%", String.valueOf(plugin.getConfig().getDouble("Bounties." + configL.get(x))))
@@ -77,6 +79,9 @@ public class BountyList implements Listener {
                 for(currentSlot = 0; currentSlot < (rows * cols); currentSlot++) {
         			int index = page * (rows * cols) + currentSlot;
         			
+        			System.out.println(ALL.size());
+        			System.out.println(index);
+        			
         			if(index >= ALL.size()) {
         				lastPage = true;
         				break;
@@ -86,20 +91,22 @@ public class BountyList implements Listener {
         				inv.setItem(currentSlot, currentItem);
         			}
         		}
-                if(!lastPage){inv.setItem(nextPage, next);} else {inv.setItem(nextPage, divi);}
-        		inv.setItem(52, divi);
-        		inv.setItem(51, divi);
-        		inv.setItem(50, divi);
-        		inv.setItem(49, divi);
-        		inv.setItem(48, divi);
-        		inv.setItem(47, divi);
-        		inv.setItem(46, divi);
-        		if(page > -1){inv.setItem(prevPage, prev);} else {inv.setItem(prevPage, divi);}
             }
             
 		}
+		if(!lastPage){inv.setItem(nextPage, next);} else {inv.setItem(nextPage, divi);}
+		inv.setItem(52, divi);
+		inv.setItem(51, divi);
+		inv.setItem(50, divi);
+		inv.setItem(49, divi);
+		inv.setItem(48, divi);
+		inv.setItem(47, divi);
+		inv.setItem(46, divi);
+		if(page > 0){inv.setItem(prevPage, prev);} else {inv.setItem(prevPage, divi);}
+		
 		myPage.put(p, 0);
 		ALL.clear();
+		
 		return inv;			
 	}
 	
@@ -110,7 +117,6 @@ public class BountyList implements Listener {
 		ItemStack c = e.getCurrentItem();
 		Player p = (Player) e.getWhoClicked();
 		
-		//Inventory Names
 		String bounty = "Bounty Contracts Page: ";
 		String currentName = inv.getName();
 		

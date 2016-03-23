@@ -16,7 +16,6 @@ public class Config implements Listener {
 	}
 
 	List<String> bountyClaim = (List<String>) Arrays.asList("&7", "&8&l<&b&lPlayer&f&lBounty&8&l> &f%player% &bclaimed a &f$%amount% &bbounty on &f%bounty%!", "&7");
-	List<String> regionList = (List<String>) Arrays.asList("REGION_NAME", "ANOTHER_REGION", "ALSO_ANOTHER_REGION");
 	List<String> bountyList = (List<String>) Arrays.asList("PLAYER_1", "PLAYER_2", "PLAYER_3");
 	List<String> heads = (List<String>) Arrays.asList("&dAmount: $&b%amount%", "&7Kill this player to collect the reward.", "", "%status%");
 
@@ -27,7 +26,8 @@ public class Config implements Listener {
 				+ "\n#"
 				+ "\nMessages: All configurable messages."
 				+ "\nBounty: All things to do with the bounty itself."
-				+ "\nRegion: Select if the player must be within the worldguard section to claim the bounty."
+				+ "\nBountyList: Used to get all the bounties in the GUI."
+				+ "\nBounties: Used to save the actual bounty value on a player."
 				+ "\n###########################################"
 				);
 		c.addDefault("Messages.Bounty-Set",
@@ -49,14 +49,11 @@ public class Config implements Listener {
 		c.addDefault("Bounty.Min-Bounty-Kill-Broadcast", Double.valueOf(150000));
 		c.addDefault("Bounty.Min-Bounty-Increase", Double.valueOf(25000));
 		
-		c.addDefault("Region.Region-Claiming", Boolean.valueOf(true));
-		c.addDefault("Region.Names", regionList);
-		
 		c.addDefault("Heads.Name", "&b&l%player%");
 		c.addDefault("Heads.Lore", heads);
 		
 		c.addDefault("BountyList", bountyList);
-		c.addDefault("Bounties.PLAYER_1.Amount", Integer.valueOf(50000));
+		c.addDefault("Bounties.PLAYER_1", Integer.valueOf(50000));
 		
 		
 		c.options().copyDefaults(true);
