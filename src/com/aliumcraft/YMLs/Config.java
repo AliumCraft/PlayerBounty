@@ -44,13 +44,17 @@ public class Config implements Listener {
 		c.addDefault("Messages.Not-Enough-Balance", "&8&l<&b&lPlayer&f&lBounty&8&l> &cYou do not have enough money to set this bounty!");
 		c.addDefault("Messages.Cannot-Bounty-Self", "&8&l<&b&lPlayer&f&lBounty&8&l> &cYou cannot set a bounty on yourself!");
 		c.addDefault("Messages.Money-Given", "&a&l+ $%amount%");
-		c.addDefault("Messages.False-Claim", "&8&l<&b&lPlayer&f&lBounty&8&l> &bYou would have collected a &f$%bounty% &bif you had killed that player in the specified zones.");
+		c.addDefault("Messages.NoPermission", "&4You do not have access to that command.");
+		c.addDefault("Messages.Reload", "&8&l<&b&lPlayer&f&lBounty&8&l> &bThis plugin has been reloaded!");
+		c.addDefault("Messages.NoPerm-BountyClaim", "&8&l<&b&lPlayer&f&lBounty&8&l> &cIf you had the write permission, you would have claimed a $%amount% bounty for killing that player!");
 		
 		c.addDefault("Bounty.Min-Bounty-Kill-Broadcast", Double.valueOf(150000));
 		c.addDefault("Bounty.Min-Bounty-Increase", Double.valueOf(25000));
 		
 		c.addDefault("Heads.Name", "&b&l%player%");
 		c.addDefault("Heads.Lore", heads);
+		
+		c.addDefault("BountyListName", "&9&lBounty Contracts Page: &5&l%page%");
 		
 		c.addDefault("BountyList", bountyList);
 		c.addDefault("Bounties.PLAYER_1", Integer.valueOf(50000));

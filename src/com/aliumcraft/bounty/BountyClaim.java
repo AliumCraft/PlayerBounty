@@ -1,4 +1,4 @@
-package com.aliumcraft;
+package com.aliumcraft.bounty;
 
 import java.util.List;
 
@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+
+import com.aliumcraft.Main;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -50,8 +52,15 @@ public class BountyClaim implements Listener {
 		Player killer = e.getEntity().getKiller();
 		e.getEntity().getWorld();
 		
-		if(plugin.getConfig().contains("Bounties." + killed.getUniqueId())) {
-			bountyClaim(killer, killed);
+		if(killer.hasPermission("pbounty.claim") || (killer.hasPermission("pbounty.admin"))) {
+			if(plugin.getConfig().contains("Bounties." + killed.getUniqueId())) {
+				bountyClaim(killer, killed);
+			}
+		} else {
+			plugin.msg(killer, plugin.getString("Messages.BountyClaim-NoPerm")
+					.replace("%amount%", plugin.getString("Bounties." + killed.getUniqueId())));
 		}
+		
+		
 	}
 }

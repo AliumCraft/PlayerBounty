@@ -1,4 +1,4 @@
-package com.aliumcraft;
+package com.aliumcraft.bounty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +13,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+
+import com.aliumcraft.Main;
 
 public class BountyList implements Listener {
 	Main plugin;
@@ -31,9 +33,10 @@ public class BountyList implements Listener {
 		int x;
 		List<String> configL = plugin.getConfig().getStringList("BountyList");
 		
-		int pageTitle = page +1;
+		int pageNum = page +1;
+		String pageTitle = plugin.getString("BountyListName").replace("%page%", String.valueOf(pageNum));
 		
-		final Inventory inv = Bukkit.createInventory(null, 54, ChatColor.translateAlternateColorCodes('&', "&9&lBounty Contracts Page: &5&l" + pageTitle));
+		final Inventory inv = Bukkit.createInventory(null, 54, ChatColor.translateAlternateColorCodes('&', pageTitle));
 		final ItemStack divi = Main.getItem(Material.THIN_GLASS, 1, 0, "&4", null);
 		final ItemStack next = Main.getItem(Material.PAPER, 1, 0, "&e&lNext Page ->", null);
 		final ItemStack prev = Main.getItem(Material.PAPER, 1, 0, "&e&l<- Previous Page", null);
@@ -79,9 +82,6 @@ public class BountyList implements Listener {
                 for(currentSlot = 0; currentSlot < (rows * cols); currentSlot++) {
         			int index = page * (rows * cols) + currentSlot;
         			
-        			System.out.println(ALL.size());
-        			System.out.println(index);
-        			
         			if(index >= ALL.size()) {
         				lastPage = true;
         				break;
@@ -110,49 +110,41 @@ public class BountyList implements Listener {
 		return inv;			
 	}
 	
-	@SuppressWarnings("null")
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
 		Inventory inv = e.getClickedInventory();
 		ItemStack c = e.getCurrentItem();
 		Player p = (Player) e.getWhoClicked();
 		
-		String bounty = "Bounty Contracts Page: ";
-		String currentName = inv.getName();
+		String invTitle = ChatColor.translateAlternateColorCodes('&', plugin.getString("BountyListName")
+				.replace("%page%", ""));
 		
 		int slotID = e.getSlot();
 		
-		if(c == null && c.getType() == Material.AIR) {
+		if(c == null) {
+			return;
+		}
+		if(!c.hasItemMeta()) {
 			return;
 		}
 		
-		if(currentName.contains(bounty)) {
-			int currentPage = myPage.get(p);
+		if(inv.getName().contains(invTitle)) {
 						
 			e.setCancelled(true);
 			
 			if(c.getType() == Material.PAPER) {
-				
-				switch(slotID) {
-				case nextPage:
-					currentPage++;
-					break;
-				case prevPage:
-					currentPage--;
-					break;
-				}
-				
-				if(currentPage >= 0) {
-					myPage.put(p, currentPage);
-					int testPage = myPage.get(p);
-					
-					Inventory page = InventoryItems(testPage, p);
+				int currentPage = myPage.get(p);
+				if(slotID == prevPage) {
+					Inventory page = InventoryItems(currentPage-1, p);
 					p.openInventory(page);
-					return;
+					myPage.put(p, currentPage-1);
+				}
+				if(slotID == nextPage) {
+					Inventory page = InventoryItems(currentPage+1, p);
+					p.openInventory(page);
+					myPage.put(p, currentPage+1);
 				}
 			}
-			
-			
 		}
 	}
 }

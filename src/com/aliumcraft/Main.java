@@ -14,6 +14,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.aliumcraft.YMLs.Config;
+import com.aliumcraft.bounty.BountyClaim;
+import com.aliumcraft.bounty.BountyList;
+
 import net.md_5.bungee.api.ChatColor;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
