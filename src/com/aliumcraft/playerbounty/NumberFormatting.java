@@ -1,4 +1,4 @@
-package com.aliumcraft;
+package com.aliumcraft.playerbounty;
 
 import java.text.DecimalFormat;
 

@@ -1,0 +1,6 @@
+Ability to enable/disable region claiming, making it so that
+  bounties can only be claimed if the player dies in that region.
+Bounty streaks; after collecting a certain amount of bounties 
+  you can recieve a extra reward (saves UUID, name & claims 
+  in config).
+If enabled, bounties will expire after time.
