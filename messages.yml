@@ -6,6 +6,7 @@ Messages:
   - "&e/bounty get <player> &d- &fDisplay the bounty on a specific player, even if they are offline."
   - "&e/bounty take <player> <amount> &d- &fTakes the amount from the players bounty if they have one."
   - "&e/bounty set <player> <amount> &d- &fSets the bounty on the players head without broadcasting it."
+  - "&e/bounty timer &d- &fReturns the time you have left until your bounty will be removed."
   - "&e/bounty reload &d- &fReloads the plugins config files. &8(Requires &7pbounty.admin &8perms)"
   - "&8&m-----------------+&r &b&lPlayer Bounty &8&m+------------------"
   BountySet: "&8&l<&b&lPlayer&f&lBounty&8&l> &f%bounty% &bnow has a &f$%amount% &bbounty on their head!"
@@ -26,6 +27,7 @@ Messages:
     Add: "&c/bounty add <name> <amount>"
     Take: "&c/bounty take <name> <amount>"
     Set: "&c/bounty set <name> <amount>"
+    Timer: "&c/bounty timer"
     
   MinBounty: "&8&l<&b&lPlayer&f&lBounty&8&l> &bThe minimum bounty you can set on someone is &f$%amount%&b."
   NotEnoughBalance: "&8&l<&b&lPlayer&f&lBounty&8&l> &cYou do not have enough money to set this bounty!"
@@ -36,3 +38,7 @@ Messages:
   Login-Message: "&b&lYou have a bounty of &a&l$&f&l%amount% &b&lon your head."
   BountyTake: "&8&l<&b&lPlayer&f&lBounty&8&l> &f%amount% &bhas been taken from &f%bounty% &band they now have a bounty of &f%total%."
   BountySet: "&8&l<&b&lPlayer&f&lBounty&8&l> &f%bounty%&bs bounty has been set to &f%amount%&b."
+  BountyExpire: "&8&l<&b&lPlayer&f&lBounty&8&l> &bYour bounty will expire in &f# &bminutes(s)."
+  CannotBounty: "&8&l<&b&lPlayer&f&lBounty&8&l> &bYou cannot bounty that player because they already have an active bounty."
+  UnknownBountyTimer: "&8&l<&b&lPlayer&f&lBounty&8&l> &bYou do not currently have a bounty."
+  TimerNotEnabled: "&8&l<&b&lPlayer&f&lBounty&8&l> &bThe timer feature is currently disabled."

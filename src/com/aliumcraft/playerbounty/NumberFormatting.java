@@ -7,4 +7,11 @@ public class NumberFormatting {
 		DecimalFormat df = new DecimalFormat("###,###,###,###,###,###,###.##");
 		return df.format(value);
 	}
+	
+	public static String timeFormat(int time) {
+		time = time / 60;
+		DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(2);
+		return df.format(time);
+	}
 }

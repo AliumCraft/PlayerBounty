@@ -3,4 +3,3 @@ Ability to enable/disable region claiming, making it so that
 Bounty streaks; after collecting a certain amount of bounties 
   you can recieve a extra reward (saves UUID, name & claims 
   in config).
-If enabled, bounties will expire after time.

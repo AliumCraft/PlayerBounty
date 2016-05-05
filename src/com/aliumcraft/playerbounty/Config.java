@@ -42,6 +42,8 @@ public class Config {
 		c.addDefault("Bounty.Min-Bounty-Kill-Broadcast", Double.valueOf(150000));
 		c.addDefault("Bounty.Min-Bounty-Increase", Double.valueOf(25000));
 		c.addDefault("Bounty.Particles", Boolean.valueOf(true));
+		c.addDefault("Bounty.Expire", Boolean.valueOf(false));
+		c.addDefault("Bounty.ExpireTime", Integer.valueOf(3600));
 		
 		c.addDefault("HeadDrops.Drop", Boolean.valueOf(true));
 		c.addDefault("HeadDrops.Name", "&fSkull of &b&l%player%");

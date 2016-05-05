@@ -10,8 +10,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.aliumcraft.playerbounty.Main;
 import com.aliumcraft.playerbounty.util.BountyAPI;
+import com.aliumcraft.playerbounty.util.BountyTimer;
 
 public class Commands implements CommandExecutor {
 	Main plugin;
@@ -77,31 +77,69 @@ public class Commands implements CommandExecutor {
 									if(z.getName() != p.getName()) {
 										double amount = roundTwoDecimals(Double.valueOf(args[2]));
 										if(Main.econ.has(p.getName(), amount)) {
-											Main.econ.withdrawPlayer(p, amount);
-											
-											if(!inv.contains(z.getName())) {
-												inv.add(z.getName());
-												Main.bounty.set("BountyList", inv);
-												plugin.saveBounty();
-											}
-											
-											plugin.msg(p, plugin.getMessage("Messages.MoneyTaken")
-													.replace("%amount%", NumberFormatting.format(amount)));
+											if(plugin.getConfig().getBoolean("Bounty.Expire")) {
+												if(!BountyTimer.timeLeft.containsKey(z)) {
+													Main.econ.withdrawPlayer(p, amount);
+													
+													if(!inv.contains(z.getName())) {
+														inv.add(z.getName());
+														Main.bounty.set("BountyList", inv);
+														plugin.saveBounty();
+													}
+													
+													plugin.msg(p, plugin.getMessage("Messages.MoneyTaken")
+															.replace("%amount%", NumberFormatting.format(amount)));
 
-											if(BountyAPI.getBounty(z) != 0) {
-												plugin.bct(plugin.getMessage("Messages.BountyAdd")
-														.replace("%player%", p.getName())
-														.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(z) + amount))
-														.replace("%bounty%", z.getName()));
+													if(BountyAPI.getBounty(z) != 0) {
+														plugin.bct(plugin.getMessage("Messages.BountyAdd")
+																.replace("%player%", p.getName())
+																.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(z) + amount))
+																.replace("%bounty%", z.getName()));
+													} else {
+														plugin.bct(plugin.getMessage("Messages.BountySet")
+																.replace("%amount%", NumberFormatting.format(amount))
+																.replace("%bounty%", z.getName()));
+													}
+													
+													BountyAPI.addBounty(z, roundTwoDecimals(amount));
+													BountyTimer countdown = new BountyTimer(plugin);
+													int time = plugin.getConfig().getInt("Bounty.ExpireTime");
+													
+													BountyTimer.timeLeft.put(z, time);
+													if(BountyTimer.timeLeft.get(z) != null) {
+														countdown.startCountdown(z, time, plugin.getMessage("Messages.BountyExpire"));
+													}
+													
+													plugin.msg(z, plugin.getMessage("Messages.BountyExpire")
+															.replace("#", NumberFormatting.timeFormat(BountyTimer.timeLeft.get(z))));
+												} else {
+													plugin.msg(p, plugin.getMessage("Messages.CannotBounty"));
+												}
 											} else {
-												plugin.bct(plugin.getMessage("Messages.BountySet")
-														.replace("%amount%", NumberFormatting.format(amount))
-														.replace("%bounty%", z.getName()));
+												Main.econ.withdrawPlayer(p, amount);
+												
+												if(!inv.contains(z.getName())) {
+													inv.add(z.getName());
+													Main.bounty.set("BountyList", inv);
+													plugin.saveBounty();
+												}
+												
+												plugin.msg(p, plugin.getMessage("Messages.MoneyTaken")
+														.replace("%amount%", NumberFormatting.format(amount)));
+
+												if(BountyAPI.getBounty(z) != 0) {
+													plugin.bct(plugin.getMessage("Messages.BountyAdd")
+															.replace("%player%", p.getName())
+															.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(z) + amount))
+															.replace("%bounty%", z.getName()));
+												} else {
+													plugin.bct(plugin.getMessage("Messages.BountySet")
+															.replace("%amount%", NumberFormatting.format(amount))
+															.replace("%bounty%", z.getName()));
+												}
+												
+												BountyAPI.addBounty(z, roundTwoDecimals(amount));
 											}
-											
-											BountyAPI.addBounty(z, roundTwoDecimals(amount));
-											Main.saveBountyStatic();
-											
 										} else {
 											plugin.msg(p, plugin.getMessage("Messages.NotEnoughBalance"));
 										}
@@ -188,6 +226,25 @@ public class Commands implements CommandExecutor {
 							}
 						} else {
 							plugin.msg(p, plugin.getMessage("Messages.IncorrectUsage.Set"));
+						}
+					} else {
+						plugin.msg(p, plugin.getMessage("Messages.NoPermission"));
+					}
+				} else if(args[0].equalsIgnoreCase("timer")) {
+					if(p.hasPermission("bounty.timer")) {
+						if(args.length == 1) {
+							if(plugin.getConfig().getBoolean("Bounty.Expire")) {
+								if(BountyTimer.timeLeft.containsKey(p)) {
+									plugin.msg(p, plugin.getMessage("Messages.BountyExpire")
+											.replace("#", NumberFormatting.timeFormat(BountyTimer.timeLeft.get(p))));
+								} else {
+									plugin.msg(p, plugin.getMessage("Messages.UnknownBountyTimer"));
+								}
+							} else {
+								plugin.msg(p, plugin.getMessage("Messages.TimerNotEnabled"));
+							}
+						} else {
+							plugin.msg(p, plugin.getMessage("Messages.IncorrectUsage.Timer"));
 						}
 					} else {
 						plugin.msg(p, plugin.getMessage("Messages.NoPermission"));

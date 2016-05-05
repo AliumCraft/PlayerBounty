@@ -1,0 +1,9 @@
+BountyList:
+- ThroatGrinder
+
+Bounties:
+  4dbb2e5f20b94aac8b9c0cbc785f780c:
+    Name: ThroatGrinder
+    Amount: 0
+    TotalBounty: 0
+    BountiesClaimed: 0
