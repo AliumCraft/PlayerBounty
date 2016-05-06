@@ -1,5 +1,5 @@
 name: PlayerBounty
-version: 1.5.8
+version: 2.0
 main: com.aliumcraft.playerbounty.Main
 depend: [Vault]
 commands:

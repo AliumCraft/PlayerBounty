@@ -28,6 +28,7 @@ Messages:
     Take: "&c/bounty take <name> <amount>"
     Set: "&c/bounty set <name> <amount>"
     Timer: "&c/bounty timer"
+    Streak: "&c/bounty streak <name>"
     
   MinBounty: "&8&l<&b&lPlayer&f&lBounty&8&l> &bThe minimum bounty you can set on someone is &f$%amount%&b."
   NotEnoughBalance: "&8&l<&b&lPlayer&f&lBounty&8&l> &cYou do not have enough money to set this bounty!"
@@ -42,3 +43,7 @@ Messages:
   CannotBounty: "&8&l<&b&lPlayer&f&lBounty&8&l> &bYou cannot bounty that player because they already have an active bounty."
   UnknownBountyTimer: "&8&l<&b&lPlayer&f&lBounty&8&l> &bYou do not currently have a bounty."
   TimerNotEnabled: "&8&l<&b&lPlayer&f&lBounty&8&l> &bThe timer feature is currently disabled."
+  BountyListDisabled: "&8&l<&b&lPlayer&f&lBounty&8&l> &cThe bounty list is currently disabled! Use &4/bounty get {name} &cto show someones bounty!"
+  BountyGetDisabled: "&8&l<&b&lPlayer&f&lBounty&8&l> &cThe bounty get command is currently disabled! Use &4/bounty list &cto view all bounties!"
+  BountyStreakSelf: "&8&l<&b&lPlayer&f&lBounty&8&l> &bYou currently have a &f{x} &bbounty streak."
+  BountyStreakOthers: "&8&l<&b&lPlayer&f&lBounty&8&l> &f%player% &bcurrently has a &f{x} &bbounty streak."

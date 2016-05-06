@@ -20,8 +20,10 @@ public class BountyAPI {
 	 * @param p - the online player.
 	 */
 	public static double getBounty(Player p) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
-			String sql = "SELECT bounty FROM " + Main.DB_TABLE + " WHERE uuid = '" + p.getUniqueId().toString().replace("-", "") + "'";
+			String sql = "SELECT bounty FROM " + Main.DB_TABLE + " WHERE uuid = '" + uuid + "'";
 			
 			try {
 				ResultSet playerData = Main.s.executeQuery(sql);
@@ -35,8 +37,8 @@ public class BountyAPI {
 		} else {
 			double amount;
 			
-			if(Main.bounty.contains("Bounties." + p.getUniqueId())) {
-				amount = Main.bounty.getDouble("Bounties." + p.getUniqueId() + ".Amount");
+			if(Main.bounty.contains("Bounties." + uuid)) {
+				amount = Main.bounty.getDouble("Bounties." + uuid + ".Amount");
 			} else {
 				amount = 0;
 			}
@@ -55,8 +57,10 @@ public class BountyAPI {
 	 * @param p - the offline player.
 	 */
 	public static double getBounty(OfflinePlayer p) { 
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
-			String sql = "SELECT bounty FROM " + Main.DB_TABLE + " WHERE uuid = '" + p.getUniqueId().toString().replace("-", "") + "'";
+			String sql = "SELECT bounty FROM " + Main.DB_TABLE + " WHERE uuid = '" + uuid + "'";
 			
 			try {
 				ResultSet playerData = Main.s.executeQuery(sql);
@@ -70,8 +74,8 @@ public class BountyAPI {
 		} else {
 			double amount;
 			
-			if(Main.bounty.contains("Bounties." + p.getUniqueId())) {
-				amount = Main.bounty.getDouble("Bounties." + p.getUniqueId() + ".Amount");
+			if(Main.bounty.contains("Bounties." + uuid)) {
+				amount = Main.bounty.getDouble("Bounties." + uuid + ".Amount");
 			} else {
 				amount = 0;
 			}
@@ -89,23 +93,25 @@ public class BountyAPI {
 	 * 
 	 * @param p - the online player.
 	 */
-	public static double getTotalBounty(Player p) {
+	public static int getTotalBounty(Player p) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
-			String sql = "SELECT TotalBounty FROM " + Main.DB_TABLE + " WHERE uuid ='" + p.getUniqueId().toString().replace("-", "") + "'";
+			String sql = "SELECT TotalBounty FROM " + Main.DB_TABLE + " WHERE uuid ='" + uuid + "'";
 			
 			try {
 				ResultSet playerData = Main.s.executeQuery(sql);
 				playerData.next();
-				return playerData.getDouble("TotalBounty");
+				return playerData.getInt("TotalBounty");
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 				return 0;
 			}
 		} else {
-			double amount = 0D;
+			int amount = 0;
 			
-			if(Main.bounty.contains("Bounties." + p.getUniqueId())) {
-				amount = Main.bounty.getDouble("Bounties." + p.getUniqueId() + ".TotalBounty");
+			if(Main.bounty.contains("Bounties." + uuid)) {
+				amount = Main.bounty.getInt("Bounties." + uuid + ".TotalBounty");
 			}			
 			return amount;
 		}
@@ -120,23 +126,25 @@ public class BountyAPI {
 	 * 
 	 * @param p - the offline player.
 	 */
-	public static double getTotalBounty(OfflinePlayer p) {
+	public static int getTotalBounty(OfflinePlayer p) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
-			String sql = "SELECT TotalBounty FROM " + Main.DB_TABLE + " WHERE uuid ='" + p.getUniqueId().toString().replace("-", "") + "'";
+			String sql = "SELECT TotalBounty FROM " + Main.DB_TABLE + " WHERE uuid ='" + uuid + "'";
 			
 			try {
 				ResultSet playerData = Main.s.executeQuery(sql);
 				playerData.next();
-				return playerData.getDouble("TotalBounty");
+				return playerData.getInt("TotalBounty");
 			} catch (SQLException ex) {
 				ex.printStackTrace();
 				return 0;
 			}
 		} else {
-			double amount = 0D;
+			int amount = 0;
 			
-			if(Main.bounty.contains("Bounties." + p.getUniqueId())) {
-				amount = Main.bounty.getDouble("Bounties." + p.getUniqueId() + ".TotalBounty");
+			if(Main.bounty.contains("Bounties." + uuid)) {
+				amount = Main.bounty.getInt("Bounties." + uuid + ".TotalBounty");
 			}			
 			return amount;
 		}
@@ -152,8 +160,10 @@ public class BountyAPI {
 	 * @param p - the online player.
 	 */
 	public static int getBountiesClaimed(Player p) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
-			String sql = "SELECT bountiesClaimed FROM " + Main.DB_TABLE + " WHERE uuid ='" + p.getUniqueId().toString().replace("-", "") + "'";
+			String sql = "SELECT bountiesClaimed FROM " + Main.DB_TABLE + " WHERE uuid ='" + uuid + "'";
 			
 			try {
 				ResultSet playerData = Main.s.executeQuery(sql);
@@ -166,8 +176,8 @@ public class BountyAPI {
 		} else {
 			int amount = 0;
 			
-			if(Main.bounty.contains("Bounties." + p.getUniqueId())) {
-				amount = Main.bounty.getInt("Bounties." + p.getUniqueId() + ".BountiesClaimed");
+			if(Main.bounty.contains("Bounties." + uuid)) {
+				amount = Main.bounty.getInt("Bounties." + uuid + ".BountiesClaimed");
 			}
 			return amount;
 		}
@@ -183,8 +193,10 @@ public class BountyAPI {
 	 * @param p - the offline player.
 	 */
 	public static int getBountiesClaimed(OfflinePlayer p) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
-			String sql = "SELECT bountiesClaimed FROM " + Main.DB_TABLE + " WHERE uuid ='" + p.getUniqueId().toString().replace("-", "") + "'";
+			String sql = "SELECT bountiesClaimed FROM " + Main.DB_TABLE + " WHERE uuid ='" + uuid + "'";
 			
 			try {
 				ResultSet playerData = Main.s.executeQuery(sql);
@@ -197,8 +209,74 @@ public class BountyAPI {
 		} else {
 			int amount = 0;
 			
-			if(Main.bounty.contains("Bounties." + p.getUniqueId())) {
-				amount = Main.bounty.getInt("Bounties." + p.getUniqueId() + ".BountiesClaimed");
+			if(Main.bounty.contains("Bounties." + uuid)) {
+				amount = Main.bounty.getInt("Bounties." + uuid + ".BountiesClaimed");
+			}
+			return amount;
+		}
+	}
+	
+	/**This will return amount of
+	 * bounties the player has killed
+	 * without dying. If MySQL is enabled it
+	 * will be called from the database
+	 * otherwise it will called from
+	 * bounties.yml.
+	 * 
+	 * @param p - the online player.
+	 */
+	public static int getBountyStreak(Player p) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		
+		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
+			String sql = "SELECT BountyStreak FROM " + Main.DB_TABLE + " WHERE uuid ='" + uuid + "'";
+			
+			try {
+				ResultSet playerData = Main.s.executeQuery(sql);
+				playerData.next();
+				return playerData.getInt("BountyStreak");
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+				return 0;
+			}
+		} else {
+			int amount = 0;
+			
+			if(Main.bounty.contains("Bounties." + uuid)) {
+				amount = Main.bounty.getInt("Bounties." + uuid + ".BountyStreak");
+			}
+			return amount;
+		}
+	}
+	
+	/**This will return amount of
+	 * bounties the player has killed
+	 * without dying. If MySQL is enabled it
+	 * will be called from the database
+	 * otherwise it will called from
+	 * bounties.yml.
+	 * 
+	 * @param p - the offline player.
+	 */
+	public static int getBountyStreak(OfflinePlayer p) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		
+		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
+			String sql = "SELECT BountyStreak FROM " + Main.DB_TABLE + " WHERE uuid ='" + uuid + "'";
+			
+			try {
+				ResultSet playerData = Main.s.executeQuery(sql);
+				playerData.next();
+				return playerData.getInt("BountyStreak");
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+				return 0;
+			}
+		} else {
+			int amount = 0;
+			
+			if(Main.bounty.contains("Bounties." + uuid)) {
+				amount = Main.bounty.getInt("Bounties." + uuid + ".BountyStreak");
 			}
 			return amount;
 		}
@@ -214,13 +292,14 @@ public class BountyAPI {
 	 * @param amount - the amount to increase the bounty by.
 	 */
 	public static void addBounty(Player p, double amount) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
 		double total = BountyAPI.getTotalBounty(p) + amount;
 		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
 			double bounty = BountyAPI.getBounty(p) + amount;
 			
-			String sql1 = "UPDATE " + Main.DB_TABLE + " SET bounty=" + bounty + " WHERE uuid = '" + p.getUniqueId().toString().replace("-", "") + "'";
-			String sql2 = "UPDATE " + Main.DB_TABLE + " SET TotalBounty=" + total + " WHERE uuid = '" + p.getUniqueId().toString().replace("-", "") + "'"; 
+			String sql1 = "UPDATE " + Main.DB_TABLE + " SET bounty=" + bounty + " WHERE uuid = '" + uuid + "'";
+			String sql2 = "UPDATE " + Main.DB_TABLE + " SET TotalBounty=" + total + " WHERE uuid = '" + uuid + "'"; 
 			
 			try {
 				Main.s.executeUpdate(sql1);
@@ -234,10 +313,10 @@ public class BountyAPI {
 				ex.printStackTrace();
 			}
 		} else {
-			double bounty = amount + Main.bounty.getDouble("Bounties." + p.getUniqueId() + ".Amount");
+			double bounty = amount + Main.bounty.getDouble("Bounties." + uuid + ".Amount");
 			
-			Main.bounty.set("Bounties." + p.getUniqueId() + ".Amount", bounty);
-			Main.bounty.set("Bounties." + p.getUniqueId() + ".TotalBounty", total);
+			Main.bounty.set("Bounties." + uuid + ".Amount", bounty);
+			Main.bounty.set("Bounties." + uuid + ".TotalBounty", total);
 			Main.saveBountyStatic();
 		}
 	}
@@ -252,13 +331,14 @@ public class BountyAPI {
 	 * @param amount - the amount to increase the bounty by.
 	 */
 	public static void addBounty(OfflinePlayer p, double amount) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
 		double total = BountyAPI.getTotalBounty(p) + amount;
 		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
 			double bounty = BountyAPI.getBounty(p) + amount;
 			
-			String sql1 = "UPDATE " + Main.DB_TABLE + " SET bounty=" + bounty + " WHERE uuid = '" + p.getUniqueId().toString().replace("-", "") + "'";
-			String sql2 = "UPDATE " + Main.DB_TABLE + " SET TotalBounty=" + total + " WHERE uuid = '" + p.getUniqueId().toString().replace("-", "") + "'"; 
+			String sql1 = "UPDATE " + Main.DB_TABLE + " SET bounty=" + bounty + " WHERE uuid = '" + uuid + "'";
+			String sql2 = "UPDATE " + Main.DB_TABLE + " SET TotalBounty=" + total + " WHERE uuid = '" + uuid + "'"; 
 			
 			try {
 				Main.s.executeUpdate(sql1);
@@ -272,10 +352,120 @@ public class BountyAPI {
 				ex.printStackTrace();
 			}
 		} else {
-			double bounty = amount + Main.bounty.getDouble("Bounties." + p.getUniqueId() + ".Amount");
+			double bounty = amount + Main.bounty.getDouble("Bounties." + uuid + ".Amount");
 			
-			Main.bounty.set("Bounties." + p.getUniqueId() + ".Amount", bounty);
-			Main.bounty.set("Bounties." + p.getUniqueId() + ".TotalBounty", total);
+			Main.bounty.set("Bounties." + uuid + ".Amount", bounty);
+			Main.bounty.set("Bounties." + uuid + ".TotalBounty", total);
+			Main.saveBountyStatic();
+		}
+	}
+	
+	/**This will add a bounty
+	 * to the specified players
+	 * bounties claimed.
+	 * 
+	 * @param p - the online player.
+	 * @param amount - the amount to increase the bountiesclaimed by.
+	 */
+	public static void addBountiesClaimed(Player p, int amount) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		int total = BountyAPI.getBountiesClaimed(p) + amount;
+		
+		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
+			
+			String sql = "UPDATE " + Main.DB_TABLE + " SET bountiesClaimed=" + total + " WHERE uuid = '" + uuid + "'";
+			
+			try {
+				Main.s.executeUpdate(sql);
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			
+		} else {			
+			Main.bounty.set("Bounties." + uuid + ".BountiesClaimed", total);
+			Main.saveBountyStatic();
+		}
+	}
+	
+	/**This will add a bounty
+	 * to the specified players
+	 * bounties claimed.
+	 * 
+	 * @param p - the offline player.
+	 * @param amount - the amount to increase the bountiesclaimed by.
+	 */
+	public static void addBountiesClaimed(OfflinePlayer p, int amount) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		int total = BountyAPI.getBountiesClaimed(p) + amount;
+		
+		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
+			
+			String sql = "UPDATE " + Main.DB_TABLE + " SET bountiesClaimed=" + total + " WHERE uuid = '" + uuid + "'";
+			
+			try {
+				Main.s.executeUpdate(sql);
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			
+		} else {			
+			Main.bounty.set("Bounties." + uuid + ".BountiesClaimed", total);
+			Main.saveBountyStatic();
+		}
+	}
+	
+	/**This will add the amount
+	 * to the specified players
+	 * bounty kill streak. This
+	 * will reset if the player
+	 * dies.
+	 * 
+	 * @param p - The online player.
+	 * @param amount - The amount to increase the bounty streak by. 
+	 */
+	public static void addBountyStreak(Player p, int amount) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		int total = BountyAPI.getBountyStreak(p) + amount;
+		
+		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
+			
+			String sql = "UPDATE " + Main.DB_TABLE + " SET BountyStreak=" + total + " WHERE uuid = '" + uuid + "'";
+			
+			try {
+				Main.s.executeUpdate(sql);
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		} else {			
+			Main.bounty.set("Bounties." + uuid + ".BountyStreak", total);
+			Main.saveBountyStatic();
+		}
+	}
+	
+	/**This will add the amount
+	 * to the specified players
+	 * bounty kill streak. This
+	 * will reset if the player
+	 * dies.
+	 * 
+	 * @param p - The online player.
+	 * @param amount - The amount to increase the bounty streak by. 
+	 */
+	public static void addBountyStreak(OfflinePlayer p, int amount) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		int total = BountyAPI.getBountyStreak(p) + amount;
+		
+		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
+			
+			String sql = "UPDATE " + Main.DB_TABLE + " SET BountyStreak=" + total + " WHERE uuid = '" + uuid + "'";
+			
+			try {
+				Main.s.executeUpdate(sql);
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		} else {			
+			Main.bounty.set("Bounties." + uuid + ".BountyStreak", total);
 			Main.saveBountyStatic();
 		}
 	}
@@ -290,10 +480,12 @@ public class BountyAPI {
 	 * @param amount - the amount to decrease the bounty by.
 	 */
 	public static void takeBounty(Player p, double amount) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
 			double bounty = BountyAPI.getBounty(p) - amount;
 			
-			String sql = "UPDATE " + Main.DB_TABLE + " SET bounty=" + bounty + " WHERE uuid = '" + p.getUniqueId().toString().replace("-", "") + "'";
+			String sql = "UPDATE " + Main.DB_TABLE + " SET bounty=" + bounty + " WHERE uuid = '" + uuid + "'";
 			
 			try {
 				Main.s.executeUpdate(sql);
@@ -303,15 +495,15 @@ public class BountyAPI {
 		} else {
 			double bounty = amount;
 			
-			if(Main.bounty.contains("Bounties." + p.getUniqueId())) {
-				bounty = Main.bounty.getDouble("Bounties." + p.getUniqueId()) - bounty;
+			if(Main.bounty.contains("Bounties." + uuid)) {
+				bounty = Main.bounty.getDouble("Bounties." + uuid) - bounty;
 				
-				Main.bounty.set("Bounties." + p.getUniqueId() + ".Amount", bounty);
+				Main.bounty.set("Bounties." + uuid + ".Amount", bounty);
 				Main.saveBountyStatic();
 			} else {
 				bounty = 0;
 				
-				Main.bounty.set("Bounties." + p.getUniqueId() + ".Amount", bounty);
+				Main.bounty.set("Bounties." + uuid + ".Amount", bounty);
 				Main.saveBountyStatic();
 			}
 		}
@@ -327,10 +519,12 @@ public class BountyAPI {
 	 * @param amount - the amount to decrease the bounty by.
 	 */
 	public static void takeBounty(OfflinePlayer p, double amount) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
 			double bounty = BountyAPI.getBounty(p) - amount;
 			
-			String sql = "UPDATE " + Main.DB_TABLE + " SET bounty=" + bounty + " WHERE uuid = '" + p.getUniqueId().toString().replace("-", "") + "'";
+			String sql = "UPDATE " + Main.DB_TABLE + " SET bounty=" + bounty + " WHERE uuid = '" + uuid + "'";
 			
 			try {
 				Main.s.executeUpdate(sql);
@@ -340,14 +534,14 @@ public class BountyAPI {
 		} else {
 			double bounty = amount;
 			
-			if(Main.bounty.contains("Bounties." + p.getUniqueId())) {
-				bounty = Main.bounty.getDouble("Bounties." + p.getUniqueId()) - bounty;				
-				Main.bounty.set("Bounties." + p.getUniqueId() + ".Amount", bounty);
+			if(Main.bounty.contains("Bounties." + uuid)) {
+				bounty = Main.bounty.getDouble("Bounties." + uuid) - bounty;				
+				Main.bounty.set("Bounties." + uuid + ".Amount", bounty);
 				Main.saveBountyStatic();
 			} else {
 				bounty = 0;
 				
-				Main.bounty.set("Bounties." + p.getUniqueId() + ".Amount", bounty);
+				Main.bounty.set("Bounties." + uuid + ".Amount", bounty);
 				Main.saveBountyStatic();
 			}
 		}
@@ -363,11 +557,12 @@ public class BountyAPI {
 	 * @param amount - the amount to set the bounty to.
 	 */
 	public static void setBounty(Player p, double amount) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
 		double total = BountyAPI.getTotalBounty(p) + amount;
 		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {			
-			String sql1 = "UPDATE " + Main.DB_TABLE + " SET bounty=" + amount + " WHERE uuid = '" + p.getUniqueId().toString().replace("-", "") + "'";
-			String sql2 = "UPDATE " + Main.DB_TABLE + " SET TotalBounty=" + total + " WHERE uuid = '" + p.getUniqueId().toString().replace("-", "") + "'"; 
+			String sql1 = "UPDATE " + Main.DB_TABLE + " SET bounty=" + amount + " WHERE uuid = '" + uuid + "'";
+			String sql2 = "UPDATE " + Main.DB_TABLE + " SET TotalBounty=" + total + " WHERE uuid = '" + uuid + "'"; 
 			
 			try {
 				Main.s.executeUpdate(sql1);
@@ -382,8 +577,8 @@ public class BountyAPI {
 			}
 		} else {
 			
-			Main.bounty.set("Bounties." + p.getUniqueId() + ".Amount", amount);
-			Main.bounty.set("Bounties." + p.getUniqueId() + ".TotalBounty", total);
+			Main.bounty.set("Bounties." + uuid + ".Amount", amount);
+			Main.bounty.set("Bounties." + uuid + ".TotalBounty", total);
 			Main.saveBountyStatic();
 		}
 	}
@@ -398,11 +593,12 @@ public class BountyAPI {
 	 * @param amount - the amount to set the bounty to.
 	 */
 	public static void setBounty(OfflinePlayer p, double amount) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
 		double total = BountyAPI.getTotalBounty(p) + amount;
 		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {			
-			String sql1 = "UPDATE " + Main.DB_TABLE + " SET bounty=" + amount + " WHERE uuid = '" + p.getUniqueId().toString().replace("-", "") + "'";
-			String sql2 = "UPDATE " + Main.DB_TABLE + " SET TotalBounty=" + total + " WHERE uuid = '" + p.getUniqueId().toString().replace("-", "") + "'"; 
+			String sql1 = "UPDATE " + Main.DB_TABLE + " SET bounty=" + amount + " WHERE uuid = '" + uuid + "'";
+			String sql2 = "UPDATE " + Main.DB_TABLE + " SET TotalBounty=" + total + " WHERE uuid = '" + uuid + "'"; 
 			
 			try {
 				Main.s.executeUpdate(sql1);
@@ -417,8 +613,60 @@ public class BountyAPI {
 			}
 		} else {
 			
-			Main.bounty.set("Bounties." + p.getUniqueId() + ".Amount", amount);
-			Main.bounty.set("Bounties." + p.getUniqueId() + ".TotalBounty", total);
+			Main.bounty.set("Bounties." + uuid + ".Amount", amount);
+			Main.bounty.set("Bounties." + uuid + ".TotalBounty", total);
+			Main.saveBountyStatic();
+		}
+	}
+	
+	/**This will set the amount
+	 * to the specified players
+	 * bounty kill streak.
+	 * 
+	 * @param p - The online player.
+	 * @param amount - The amount to set the bounty streak to. 
+	 */
+	public static void setBountyStreak(Player p, double amount) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		double total = amount;
+		
+		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
+			
+			String sql = "UPDATE " + Main.DB_TABLE + " SET BountyStreak=" + total + " WHERE uuid = '" + uuid + "'";
+			
+			try {
+				Main.s.executeUpdate(sql);
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		} else {			
+			Main.bounty.set("Bounties." + uuid + ".BountyStreak", total);
+			Main.saveBountyStatic();
+		}
+	}
+	
+	/**This will set the amount
+	 * to the specified players
+	 * bounty kill streak.
+	 * 
+	 * @param p - The offline player.
+	 * @param amount - The amount to set the bounty streak to. 
+	 */
+	public static void setBountyStreak(OfflinePlayer p, double amount) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		double total = amount;
+		
+		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
+			
+			String sql = "UPDATE " + Main.DB_TABLE + " SET BountyStreak=" + total + " WHERE uuid = '" + uuid + "'";
+			
+			try {
+				Main.s.executeUpdate(sql);
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		} else {			
+			Main.bounty.set("Bounties." + uuid + ".BountyStreak", total);
 			Main.saveBountyStatic();
 		}
 	}

@@ -28,13 +28,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.aliumcraft.playerbounty.util.BountyClaim;
 import com.aliumcraft.playerbounty.util.BountyList;
+
 import net.milkbowl.vault.economy.Economy;
 
 public class Main extends JavaPlugin {
 	private static final Logger log = Logger.getLogger("Minecraft");
 	public static Economy econ = null;
 
-	public Config config = new Config(this);
 	public Commands cmd = new Commands(this);
 	public BountyList bl = new BountyList(this);
 	public BountyClaim bc = new BountyClaim(this);
@@ -88,7 +88,7 @@ public class Main extends JavaPlugin {
 					s = conn.createStatement();
 					
 					try {
-						String createTable = "CREATE TABLE IF NOT EXISTS " + DB_TABLE + " (UUID varchar(32) PRIMARY KEY, name varchar(16), bounty double, bountiesClaimed int, TotalBounty double)";
+						String createTable = "CREATE TABLE IF NOT EXISTS " + DB_TABLE + " (UUID varchar(32) PRIMARY KEY, name varchar(16), bounty double, bountiesClaimed int, BountyStreak int, TotalBounty double)";
 						s.execute(createTable);
 						getLogger().info("Table " + DB_TABLE + " successfully created.");
 					} catch(Exception e) {
@@ -96,7 +96,7 @@ public class Main extends JavaPlugin {
 					}
 					
 					try {
-						String sql = "INSERT INTO " + DB_TABLE + " (uuid, name, bounty, bountiesClaimed, TotalBounty) VALUES ('4dbb2e5f20b94aac8b9c0cbc785f780c', 'ThroatGrinder', 0, 0, 0)";
+						String sql = "INSERT INTO " + DB_TABLE + " (uuid, name, bounty, bountiesClaimed, BountyStreak, TotalBounty) VALUES ('4dbb2e5f20b94aac8b9c0cbc785f780c', 'ThroatGrinder', 0, 0, 0, 0)";
 						s.executeUpdate(sql);
 						getLogger().info("Successfully created a row.");
 					} catch (Exception e) {
@@ -124,7 +124,9 @@ public class Main extends JavaPlugin {
 		loadYamls();
 
 		PluginManager pm = getServer().getPluginManager();
-		config.loadMyConfig();
+		getConfig().options().copyDefaults(true);
+		saveDefaultConfig();
+		
 		pm.registerEvents(bl, this);
 		pm.registerEvents(bc, this);
 		pm.registerEvents(pe, this);
@@ -256,6 +258,10 @@ public class Main extends JavaPlugin {
 	public List<String> getStrings(String string) {
 		string.replace('&', '§');
 		return getConfig().getStringList(string);
+	}
+	
+	public FileConfiguration getBounty() {
+		return bounty;
 	}
 
 	public static ItemStack getItem(Material material, int itemAmount, int itemData, String name, List<String> lores) {

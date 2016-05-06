@@ -1,0 +1,79 @@
+# PlayerBounty created by AliumCraft.
+#
+# Database: Input all your information here for the database.
+# Bounty: All things to do with the organization of the bounty.
+# HeadDrops: Used to customize the head drops when a bounty is claimed.
+# Inventory: Used to customize all the information input into the GUI.
+
+Database:
+  Enabled: false
+  HOST: 'localhost'
+  PORT: '3306'
+  NAME: 'sql_bukkit'
+  TABLE: 'playerbounty'
+  USER: 'root'
+  PASS: ''
+  
+Bounty:
+  Min-Bounty-Kill-Broadcast: 150000.00
+  Min-Bounty-Increase: 25000.00
+  Particles: true
+  Expire: false
+  ExpireTime: 3600
+  
+HeadDrops:
+  Drop: true
+  Name: '&fSkull of &b&l%player%'
+  Lore:
+  - '&7Defeated by &f%killer% &7on'
+  - '&f%date% &7with a(n)'
+  - '%weapon%'
+  - '&7to claim a bounty on their'
+  - '&7head worth &a$&f%amount%&7.'
+
+Inventory:
+  Enabled: true
+  Name: '&9Bounties Page: &5&l%page%'
+  Offline: false
+  Heads:
+    Name: '&r&fSkull of &b%player%'
+    Lore:
+    - '&dAmount: $&b%amount%'
+    - '&7Kill this player to collect the reward.'
+    - ''
+    - '%status%'
+  Divider:
+    Name: '&4'
+    Lore:
+    - ''
+  NextPage:
+    Name: '&e&lNext Page ->'
+    Lore:
+    - ''
+  PrevPage:
+    Name: '&e&l<- Previous Page'
+    Lore:
+    - ''
+    
+BountyStreak:
+  Rewards:
+    1:
+      Cash: 0.00
+      Items:
+        1:
+          Type: 162
+          Amount: 5
+          Data: 0
+          Name: ''
+          Lore: []
+        2:
+          Type: 162
+          Amount: 5
+          Data: 0
+          Name: ''
+          Lore: []
+  Broadcast:
+    5: '&8&l<&b&lPlayer&f&lBounty&8&l> &f%player% &bhas reached a bounty kill streak of &15&b!'
+    10: '&8&l<&b&lPlayer&f&lBounty&8&l> &f%player% &bhas reached a bounty kill streak of &15&b!'
+    100: '&8&l<&b&lPlayer&f&lBounty&8&l> &f%player% &bhas reached a bounty kill streak of &15&b!'
+    

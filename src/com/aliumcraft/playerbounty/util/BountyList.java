@@ -34,7 +34,7 @@ public class BountyList implements Listener {
 	@SuppressWarnings("deprecation")
 	public Inventory InventoryItems(int page, Player p) {
 		int x;
-		List<String> configL = Main.bounty.getStringList("BountyList");
+		List<String> configL = plugin.getBounty().getStringList("BountyList");
 		
 		int pageNum = page +1;
 		String pageTitle = plugin.getString("Inventory.Name").replace("%page%", String.valueOf(pageNum));
@@ -55,7 +55,7 @@ public class BountyList implements Listener {
 		final int rows = 5;
 		
 		int currentSlot = 0;
-		Integer size = configL.size();
+		int size = configL.size();
 		
 		for(x=0; x < size; x++) {
 			ItemStack skull = new ItemStack(397, 1, (short) 3);
@@ -67,67 +67,8 @@ public class BountyList implements Listener {
             if(z == null) {
             	if(plugin.getConfig().getBoolean("Inventory.Offline")) {
             		OfflinePlayer pz = plugin.getServer().getOfflinePlayer(configL.get(x));
-                	
-                	meta.setOwner(pz.getName());
-                	meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.getString("Inventory.Heads.Name")
-                			.replace("%player%", pz.getName())));
-                	
-                	for(String l : lo) {
-                		lore.add(ChatColor.translateAlternateColorCodes('&', l)
-            					.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(pz)))
-            					.replace("%status%", ChatColor.translateAlternateColorCodes('&', "&c&lOFFLINE")));
-                	}
-                	meta.setLore(lore);
-                	skull.setItemMeta(meta);
-                	ALL.add(skull);
-                	
-                	for(currentSlot = 0; currentSlot < (rows * cols); currentSlot++) {
-            			int index = page * (rows * cols) + currentSlot;
-            			
-            			if(index >= ALL.size()) {
-            				lastPage = true;
-            				break;
-            			} else {
-            				lastPage = false;
-            				ItemStack currentItem = ALL.get(index);
-            				inv.setItem(currentSlot, currentItem);
-            			}
-            		}
-            	} else {
-            		continue;
-            	}
-            } else {
-            	if(p.canSee(z)) {
-            		meta.setOwner(configL.get(x));
-                    meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.getString("Inventory.Heads.Name")
-                    		.replace("%player%", configL.get(x))));
-                    
-                    for (String l : lo) {
-                    	if(z != null) {
-                    		lore.add(ChatColor.translateAlternateColorCodes('&', l)
-                        			.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(z)))
-                        			.replace("%status%", ChatColor.translateAlternateColorCodes('&', "&a&lONLINE")));
-                    	}
-                    }
-                    meta.setLore(lore);
-                    skull.setItemMeta(meta);
-                    ALL.add(skull);
-                    
-                    for(currentSlot = 0; currentSlot < (rows * cols); currentSlot++) {
-            			int index = page * (rows * cols) + currentSlot;
-            			
-            			if(index >= ALL.size()) {
-            				lastPage = true;
-            				break;
-            			} else {
-            				lastPage = false;
-            				ItemStack currentItem = ALL.get(index);
-            				inv.setItem(currentSlot, currentItem);
-            			}
-            		}
-            	} else {
-            		if(plugin.getConfig().getBoolean("Inventory.Offline")) {
-                		OfflinePlayer pz = plugin.getServer().getOfflinePlayer(configL.get(x));
+            		
+            		if(BountyAPI.getBounty(pz) != 0) {
                     	
                     	meta.setOwner(pz.getName());
                     	meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.getString("Inventory.Heads.Name")
@@ -154,6 +95,78 @@ public class BountyList implements Listener {
                 				inv.setItem(currentSlot, currentItem);
                 			}
                 		}
+            		} else {
+            			continue;
+            		}
+            	} else {
+            		continue;
+            	}
+            } else {
+            	if(p.canSee(z)) {
+            		if(BountyAPI.getBounty(z) != 0) {
+            			meta.setOwner(configL.get(x));
+                        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.getString("Inventory.Heads.Name")
+                        		.replace("%player%", configL.get(x))));
+                        
+                        for (String l : lo) {
+                        	if(z != null) {
+                        		lore.add(ChatColor.translateAlternateColorCodes('&', l)
+                            			.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(z)))
+                            			.replace("%status%", ChatColor.translateAlternateColorCodes('&', "&a&lONLINE")));
+                        	}
+                        }
+                        meta.setLore(lore);
+                        skull.setItemMeta(meta);
+                        ALL.add(skull);
+                        
+                        for(currentSlot = 0; currentSlot < (rows * cols); currentSlot++) {
+                			int index = page * (rows * cols) + currentSlot;
+                			
+                			if(index >= ALL.size()) {
+                				lastPage = true;
+                				break;
+                			} else {
+                				lastPage = false;
+                				ItemStack currentItem = ALL.get(index);
+                				inv.setItem(currentSlot, currentItem);
+                			}
+                		}
+            		} else {
+            			continue;
+            		}
+            	} else {
+            		if(plugin.getConfig().getBoolean("Inventory.Offline")) {
+            			OfflinePlayer pz = plugin.getServer().getOfflinePlayer(configL.get(x));
+            			
+            			if(BountyAPI.getBounty(pz) != 0) {
+            				meta.setOwner(pz.getName());
+                        	meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', plugin.getString("Inventory.Heads.Name")
+                        			.replace("%player%", pz.getName())));
+                        	
+                        	for(String l : lo) {
+                        		lore.add(ChatColor.translateAlternateColorCodes('&', l)
+                    					.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(pz)))
+                    					.replace("%status%", ChatColor.translateAlternateColorCodes('&', "&c&lOFFLINE")));
+                        	}
+                        	meta.setLore(lore);
+                        	skull.setItemMeta(meta);
+                        	ALL.add(skull);
+                        	
+                        	for(currentSlot = 0; currentSlot < (rows * cols); currentSlot++) {
+                    			int index = page * (rows * cols) + currentSlot;
+                    			
+                    			if(index >= ALL.size()) {
+                    				lastPage = true;
+                    				break;
+                    			} else {
+                    				lastPage = false;
+                    				ItemStack currentItem = ALL.get(index);
+                    				inv.setItem(currentSlot, currentItem);
+                    			}
+                    		}
+            			} else {
+            				continue;
+            			}
                 	} else {
                 		continue;
                 	}

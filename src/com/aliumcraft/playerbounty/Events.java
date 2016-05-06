@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.aliumcraft.playerbounty.util.BountyAPI;
 import com.aliumcraft.playerbounty.util.BountyList;
 
 public class Events implements Listener {
@@ -69,12 +70,9 @@ public class Events implements Listener {
 	}
 	
 	public boolean hasBounty(Player p) {
-		if(plugin.getConfig().getBoolean("Database.Enabled")) {
+		if(BountyAPI.getBounty(p) != 0) {
 			return true;
 		} else {
-			if(Main.bounty.getDouble("Bounties." + p.getUniqueId()) != 0) {
-				return true;
-			}
 			return false;
 		}
 	}
@@ -102,27 +100,39 @@ public class Events implements Listener {
 	}
 	
 	private void createSqlEntryOnLogin(Player p) {
+		String uuid = p.getUniqueId().toString().replace("-", "");
+		
 		if(plugin.getConfig().getBoolean("Database.Enabled")) {
-			String sql = "INSERT INTO " + Main.DB_TABLE + " (uuid, name, bounty, bountiesClaimed, TotalBounty) VALUES ('"
-					+ p.getUniqueId().toString().replace("-", "") + "', '" + p.getName() + "', 0, 0, 0)";
+			String sql = "INSERT INTO " + Main.DB_TABLE + " (uuid, name, bounty, bountiesClaimed, BountyStreak, TotalBounty) VALUES ('"
+					+ uuid + "', '" + p.getName() + "', 0, 0, 0, 0)";
 			try {
 				Main.s.executeUpdate(sql);
 			} catch (Exception e) {
 				plugin.getLogger().info("Player is already stored.");
 				
-				String setName = "UPDATE " + Main.DB_TABLE + " SET name=" + p.getName() + " WHERE uuid = '" + p.getUniqueId().toString().replace("-", "") + "'";
+				String setName = "UPDATE " + Main.DB_TABLE + " SET name=" + p.getName() + " WHERE uuid = '" + uuid + "'";
 				try {
 					Main.s.executeUpdate(setName);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
 			}
+			
+			if(!Main.bounty.contains("Bounties." + uuid)) {
+				Main.bounty.set("Bounties." + uuid + ".Name", p.getName());
+				Main.bounty.set("Bounties." + uuid + ".Amount", 0);
+				Main.bounty.set("Bounties." + uuid + ".TotalBounty", 0);
+				Main.bounty.set("Bounties." + uuid + ".BountiesClaimed", 0);
+				Main.bounty.set("Bounties." + uuid + ".BountyStreak", 0);
+				plugin.saveBounty();
+			}
 		} else {
-			if(!Main.bounty.contains("Bounties." + p.getUniqueId())) {
-				Main.bounty.set("Bounties." + p.getUniqueId() + ".Name", p.getName());
-				Main.bounty.set("Bounties." + p.getUniqueId() + ".Amount", 0);
-				Main.bounty.set("Bounties." + p.getUniqueId() + ".TotalBounty", 0);
-				Main.bounty.set("Bounties." + p.getUniqueId() + ".BountiesClaimed", 0);
+			if(!Main.bounty.contains("Bounties." + uuid)) {
+				Main.bounty.set("Bounties." + uuid + ".Name", p.getName());
+				Main.bounty.set("Bounties." + uuid + ".Amount", 0);
+				Main.bounty.set("Bounties." + uuid + ".TotalBounty", 0);
+				Main.bounty.set("Bounties." + uuid + ".BountiesClaimed", 0);
+				Main.bounty.set("Bounties." + uuid + ".BountyStreak", 0);
 				plugin.saveBounty();
 			}
 		}

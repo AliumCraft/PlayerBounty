@@ -3,6 +3,7 @@ package com.aliumcraft.playerbounty;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -38,39 +39,48 @@ public class Commands implements CommandExecutor {
 					for(String s : plugin.messages.getStringList("Messages.Help")) {
 						plugin.msg(p, ChatColor.translateAlternateColorCodes('&', s));
 					}
+					
 				} else if (args[0].equalsIgnoreCase("list")) {
-					if (args.length == 1)
-					{
-						p.openInventory(plugin.bl.InventoryItems(0, p));
-						plugin.msg(p, plugin.getMessage("Messages.OpeningList"));
-					} else {
-						plugin.msg(p, plugin.getMessage("Messages.IncorrectUsage.Usage"));
-					}
-				} else if (args[0].equalsIgnoreCase("get")) {
-					if(args.length == 2) {
-						Player pExact = p.getServer().getPlayerExact(args[1]);
-						
-						if(pExact != null) {
-							plugin.msg(p, plugin.getMessage("Messages.BountyGet")
-									.replace("%bounty%", pExact.getName())
-									.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(pExact))));
+					if(plugin.getConfig().getBoolean("Inventory.Enabled")) {
+						if (args.length == 1)
+						{
+							p.openInventory(plugin.bl.InventoryItems(0, p));
+							plugin.msg(p, plugin.getMessage("Messages.OpeningList"));
 						} else {
-							OfflinePlayer pOffline = p.getServer().getOfflinePlayer(args[1]);
-							
-							plugin.msg(p, plugin.getMessage("Messages.BountyGet")
-									.replace("%bounty%", pOffline.getName())
-									.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(pOffline))));
+							plugin.msg(p, plugin.getMessage("Messages.IncorrectUsage.Usage"));
 						}
 					} else {
-						plugin.msg(p, plugin.getMessage("Messages.IncorrectUsage.Get"));
+						plugin.msg(p, plugin.getMessage("Messages.BountyListDisabled"));
 					}
 					
+				} else if (args[0].equalsIgnoreCase("get")) {
+					if(!plugin.getConfig().getBoolean("Inventory.Enabled")) {
+						if(args.length == 2) {
+							Player pExact = p.getServer().getPlayerExact(args[1]);
+							
+							if(pExact != null) {
+								plugin.msg(p, plugin.getMessage("Messages.BountyGet")
+										.replace("%bounty%", pExact.getName())
+										.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(pExact))));
+							} else {
+								OfflinePlayer pOffline = p.getServer().getOfflinePlayer(args[1]);
+								
+								plugin.msg(p, plugin.getMessage("Messages.BountyGet")
+										.replace("%bounty%", pOffline.getName())
+										.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(pOffline))));
+							}
+						} else {
+							plugin.msg(p, plugin.getMessage("Messages.IncorrectUsage.Get"));
+						}
+					} else {
+						plugin.msg(p, plugin.getMessage("Messages.BountyGetDisabled"));
+					}
 									
 				} else if (args[0].equalsIgnoreCase("add")) {
 					if(args.length == 3) {
 						try {
 							if(Double.valueOf(args[2]) >= plugin.getConfig().getDouble("Bounty.Min-Bounty-Increase")) {
-								List<String> inv = Main.bounty.getStringList("BountyList");
+								List<String> inv = plugin.getBounty().getStringList("BountyList");
 								Player z = p.getServer().getPlayer(args[1]);
 								
 								if(z != null) {
@@ -83,7 +93,7 @@ public class Commands implements CommandExecutor {
 													
 													if(!inv.contains(z.getName())) {
 														inv.add(z.getName());
-														Main.bounty.set("BountyList", inv);
+														plugin.getBounty().set("BountyList", inv);
 														plugin.saveBounty();
 													}
 													
@@ -120,7 +130,7 @@ public class Commands implements CommandExecutor {
 												
 												if(!inv.contains(z.getName())) {
 													inv.add(z.getName());
-													Main.bounty.set("BountyList", inv);
+													plugin.getBounty().set("BountyList", inv);
 													plugin.saveBounty();
 												}
 												
@@ -160,12 +170,14 @@ public class Commands implements CommandExecutor {
 					} else {
 						plugin.msg(p, plugin.getMessage("Messages.IncorrectUsage.Add"));
 					}
+					
 				} else if(args[0].equalsIgnoreCase("reload")) {
 					if(p.hasPermission("bounty.admin")) {
 						plugin.loadYamls();
 						plugin.reloadConfig();
 						plugin.msg(p, plugin.getMessage("Messages.Reload"));
 					}	
+					
 				} else if(args[0].equalsIgnoreCase("take")) {
 					if(p.hasPermission("bounty.admin")) {
 						if(args.length == 3) {
@@ -205,6 +217,7 @@ public class Commands implements CommandExecutor {
 					} else {
 						plugin.msg(p, plugin.getMessage("Messages.NoPermission"));
 					}
+					
 				} else if(args[0].equalsIgnoreCase("set")) {
 					if(p.hasPermission("bounty.admin")) {
 						if(args.length == 3) {
@@ -230,6 +243,7 @@ public class Commands implements CommandExecutor {
 					} else {
 						plugin.msg(p, plugin.getMessage("Messages.NoPermission"));
 					}
+					
 				} else if(args[0].equalsIgnoreCase("timer")) {
 					if(p.hasPermission("bounty.timer")) {
 						if(args.length == 1) {
@@ -248,6 +262,28 @@ public class Commands implements CommandExecutor {
 						}
 					} else {
 						plugin.msg(p, plugin.getMessage("Messages.NoPermission"));
+					}
+					
+				} else if(args[0].equalsIgnoreCase("streak")) {
+					if(p.hasPermission("bounty.default")) {
+						if(args.length == 1) {
+							plugin.msg(p, plugin.getMessage("Messages.BountyStreakSelf")
+									.replace("{x}", String.valueOf(BountyAPI.getBountyStreak(p))));
+						} else if(args.length == 2) {
+							Player z = Bukkit.getServer().getPlayer(args[1]);
+							
+							if(z != null) {
+								plugin.msg(p, plugin.getMessage("Messages.BountyStreakSelf")
+										.replace("{x}", String.valueOf(BountyAPI.getBountyStreak(z)))
+										.replace("%player%", z.getName()));
+							} else {
+								plugin.msg(p, plugin.getMessage("Messages.BountyGetInvalidPlayer")
+										.replace("%bounty%", args[1]));
+								
+							}
+						} else {
+							plugin.msg(p, plugin.getMessage("Messages.IncorrectUsage.Streak"));
+						}
 					}
 				}
 			} else {
