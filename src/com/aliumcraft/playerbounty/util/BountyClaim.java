@@ -81,11 +81,13 @@ public class BountyClaim implements Listener {
 			}
 		}
 		
-		if(plugin.getConfig().contains("BountyStreak.Broadcast." + BountyAPI.getBountyStreak(p))) {
-			String msg = plugin.getString("BountyStreak.Broadcast." + BountyAPI.getBountyStreak(p));
-			
-			Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg)
-					.replace("%player%", p.getName()));
+		if(plugin.getConfig().getBoolean("Enabled.KillStreakBroadcast")) {
+			if(plugin.getConfig().contains("BountyStreak.Broadcast." + BountyAPI.getBountyStreak(p))) {
+				String msg = plugin.getString("BountyStreak.Broadcast." + BountyAPI.getBountyStreak(p));
+				
+				Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', msg)
+						.replace("%player%", p.getName()));
+			}
 		}
 	}
 	
@@ -95,18 +97,17 @@ public class BountyClaim implements Listener {
 		List<String> bountyList = plugin.getBounty().getStringList("BountyList");
 		
 		if(amountD >= plugin.getConfig().getDouble("Bounty.Min-Bounty-Kill-Broadcast")) {
-			for(String s : plugin.getMessages("Messages.BountyClaim")) {
-				plugin.bct(ChatColor.translateAlternateColorCodes('&', s)
-						.replace("%amount%", amount)
-						.replace("%player%", killer.getName())
-						.replace("%bounty%", killed.getName()));
+			if(plugin.getConfig().getBoolean("Enabled.BountyClaimBroadcast")) {
+				for(String s : plugin.getMessages("Messages.BountyClaim")) {
+					plugin.bct(ChatColor.translateAlternateColorCodes('&', s)
+							.replace("%amount%", amount)
+							.replace("%player%", killer.getName())
+							.replace("%bounty%", killed.getName()));
+				}
 			}
-			plugin.msg(killer, plugin.getMessage("Messages.MoneyGiven")
-					.replace("%amount%", amount));
-		} else {
-			plugin.msg(killer, plugin.getMessage("Messages.MoneyGiven")
-					.replace("%amount%", amount));
 		}
+		plugin.msg(killer, plugin.getMessage("Messages.MoneyGiven")
+				.replace("%amount%", amount));
 		Main.econ.depositPlayer(killer.getName(), amountD);
 		
 		bountyList.remove(killed.getName());
@@ -184,7 +185,7 @@ public class BountyClaim implements Listener {
 						}	
 					} else {
 						plugin.msg(killer, plugin.getMessage("Messages.NoPermission-BountyClaim")
-								.replace("%amount%", plugin.getConfig().getString("Bounties." + killed.getUniqueId())));
+								.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(killed))));
 					}
 				}
 			}

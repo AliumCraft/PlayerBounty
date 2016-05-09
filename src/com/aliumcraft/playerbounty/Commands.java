@@ -22,7 +22,7 @@ public class Commands implements CommandExecutor {
 	}
 
 
-	@SuppressWarnings({ "deprecation", "unused" })
+	@SuppressWarnings({ "deprecation"})
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) 
 	{
 		if (!(sender instanceof Player)) 
@@ -101,14 +101,18 @@ public class Commands implements CommandExecutor {
 															.replace("%amount%", NumberFormatting.format(amount)));
 
 													if(BountyAPI.getBounty(z) != 0) {
-														plugin.bct(plugin.getMessage("Messages.BountyAdd")
-																.replace("%player%", p.getName())
-																.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(z) + amount))
-																.replace("%bounty%", z.getName()));
+														if(plugin.getConfig().getBoolean("Enabled.BountyAddBroadcast")) {
+															plugin.bct(plugin.getMessage("Messages.BountyAdd")
+																	.replace("%player%", p.getName())
+																	.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(z) + amount))
+																	.replace("%bounty%", z.getName()));
+														}
 													} else {
-														plugin.bct(plugin.getMessage("Messages.BountySet")
-																.replace("%amount%", NumberFormatting.format(amount))
-																.replace("%bounty%", z.getName()));
+														if(plugin.getConfig().getBoolean("Enabled.BountySetBroadcast")) {
+															plugin.bct(plugin.getMessage("Messages.BountySet")
+																	.replace("%amount%", NumberFormatting.format(amount))
+																	.replace("%bounty%", z.getName()));
+														}
 													}
 													
 													BountyAPI.addBounty(z, roundTwoDecimals(amount));
@@ -138,14 +142,18 @@ public class Commands implements CommandExecutor {
 														.replace("%amount%", NumberFormatting.format(amount)));
 
 												if(BountyAPI.getBounty(z) != 0) {
-													plugin.bct(plugin.getMessage("Messages.BountyAdd")
-															.replace("%player%", p.getName())
-															.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(z) + amount))
-															.replace("%bounty%", z.getName()));
+													if(plugin.getConfig().getBoolean("Enabled.BountyAddBroadcast")) {
+														plugin.bct(plugin.getMessage("Messages.BountyAdd")
+																.replace("%player%", p.getName())
+																.replace("%amount%", NumberFormatting.format(BountyAPI.getBounty(z) + amount))
+																.replace("%bounty%", z.getName()));
+													}
 												} else {
-													plugin.bct(plugin.getMessage("Messages.BountySet")
-															.replace("%amount%", NumberFormatting.format(amount))
-															.replace("%bounty%", z.getName()));
+													if(plugin.getConfig().getBoolean("Enabled.BountySetBroadcast")) {
+														plugin.bct(plugin.getMessage("Messages.BountySet")
+																.replace("%amount%", NumberFormatting.format(amount))
+																.replace("%bounty%", z.getName()));
+													}
 												}
 												
 												BountyAPI.addBounty(z, roundTwoDecimals(amount));
@@ -184,8 +192,8 @@ public class Commands implements CommandExecutor {
 							try {
 								Player z = p.getServer().getPlayer(args[1]);
 								
-								if(z.getName() != p.getName()) {
-									if(z != null) {
+								if(z != null) {
+									if(z.getName() != p.getName()) {
 										double amount = roundTwoDecimals(Double.valueOf(args[2]));
 										
 										if(BountyAPI.getBounty(z) - amount > 0) {
@@ -202,11 +210,11 @@ public class Commands implements CommandExecutor {
 											BountyAPI.setBounty(p, 0);
 										}
 									} else {
-										plugin.msg(p, plugin.getMessage("Messages.BountyGetInvalidPlayer")
-												.replace("%bounty%", args[1]));
+										plugin.msg(p, plugin.getMessage("Messages.CannotBountySelf"));
 									}
 								} else {
-									plugin.msg(p, plugin.getMessage("Messages.CannotBountySelf"));
+									plugin.msg(p, plugin.getMessage("Messages.BountyGetInvalidPlayer")
+											.replace("%bounty%", args[1]));
 								}
 							} catch (NumberFormatException e) {
 								plugin.msg(p, plugin.getMessage("Messages.IncorrectUsage.Usage"));

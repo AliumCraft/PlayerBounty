@@ -55,6 +55,12 @@ Inventory:
     Lore:
     - ''
     
+Enabled:
+  KillStreakBroadcast: true
+  BountyClaimBroadcast: true
+  BountySetBroadcast: true
+  BountyAddBroadcast: true
+    
 BountyStreak:
   Rewards:
     1:
@@ -72,6 +78,7 @@ BountyStreak:
           Data: 0
           Name: ''
           Lore: []
+          
   Broadcast:
     5: '&8&l<&b&lPlayer&f&lBounty&8&l> &f%player% &bhas reached a bounty kill streak of &15&b!'
     10: '&8&l<&b&lPlayer&f&lBounty&8&l> &f%player% &bhas reached a bounty kill streak of &15&b!'
