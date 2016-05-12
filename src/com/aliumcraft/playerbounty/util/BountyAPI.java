@@ -2,6 +2,7 @@ package com.aliumcraft.playerbounty.util;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -481,11 +482,17 @@ public class BountyAPI {
 	 */
 	public static void takeBounty(Player p, double amount) {
 		String uuid = p.getUniqueId().toString().replace("-", "");
+		double current = BountyAPI.getBounty(p);
+		double bounty = current - amount;
 		
-		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
-			double bounty = BountyAPI.getBounty(p) - amount;
+		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {			
+			String sql;
 			
-			String sql = "UPDATE " + Main.DB_TABLE + " SET bounty=" + bounty + " WHERE uuid = '" + uuid + "'";
+			if(bounty > 0) {
+				sql = "UPDATE " + Main.DB_TABLE + " SET bounty=" + bounty + " WHERE uuid = '" + uuid + "'";
+			} else {
+				sql = "UPDATE " + Main.DB_TABLE + " SET bounty=" + 0D + " WHERE uuid = '" + uuid + "'";
+			}
 			
 			try {
 				Main.s.executeUpdate(sql);
@@ -493,19 +500,13 @@ public class BountyAPI {
 				ex.printStackTrace();
 			}
 		} else {
-			double bounty = amount;
 			
-			if(Main.bounty.contains("Bounties." + uuid)) {
-				bounty = Main.bounty.getDouble("Bounties." + uuid) - bounty;
-				
-				Main.bounty.set("Bounties." + uuid + ".Amount", bounty);
-				Main.saveBountyStatic();
+			if(bounty > 0) {
+				Main.getBounty().set("Bounties." + uuid + ".Amount", bounty);
 			} else {
-				bounty = 0;
-				
-				Main.bounty.set("Bounties." + uuid + ".Amount", bounty);
-				Main.saveBountyStatic();
+				Main.getBounty().set("Bounties." + uuid + ".Amount", 0D);
 			}
+			Main.saveBountyStatic();
 		}
 	}
 	
@@ -520,11 +521,17 @@ public class BountyAPI {
 	 */
 	public static void takeBounty(OfflinePlayer p, double amount) {
 		String uuid = p.getUniqueId().toString().replace("-", "");
+		double current = BountyAPI.getBounty(p);
+		double bounty = current - amount;
 		
-		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {
-			double bounty = BountyAPI.getBounty(p) - amount;
+		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {			
+			String sql;
 			
-			String sql = "UPDATE " + Main.DB_TABLE + " SET bounty=" + bounty + " WHERE uuid = '" + uuid + "'";
+			if(bounty > 0) {
+				sql = "UPDATE " + Main.DB_TABLE + " SET bounty=" + bounty + " WHERE uuid = '" + uuid + "'";
+			} else {
+				sql = "UPDATE " + Main.DB_TABLE + " SET bounty=" + 0D + " WHERE uuid = '" + uuid + "'";
+			}
 			
 			try {
 				Main.s.executeUpdate(sql);
@@ -532,18 +539,13 @@ public class BountyAPI {
 				ex.printStackTrace();
 			}
 		} else {
-			double bounty = amount;
 			
-			if(Main.bounty.contains("Bounties." + uuid)) {
-				bounty = Main.bounty.getDouble("Bounties." + uuid) - bounty;				
-				Main.bounty.set("Bounties." + uuid + ".Amount", bounty);
-				Main.saveBountyStatic();
+			if(bounty > 0) {
+				Main.getBounty().set("Bounties." + uuid + ".Amount", bounty);
 			} else {
-				bounty = 0;
-				
-				Main.bounty.set("Bounties." + uuid + ".Amount", bounty);
-				Main.saveBountyStatic();
+				Main.getBounty().set("Bounties." + uuid + ".Amount", 0D);
 			}
+			Main.saveBountyStatic();
 		}
 	}
 	
@@ -559,6 +561,11 @@ public class BountyAPI {
 	public static void setBounty(Player p, double amount) {
 		String uuid = p.getUniqueId().toString().replace("-", "");
 		double total = BountyAPI.getTotalBounty(p) + amount;
+		List<String> bountylist = Main.getBounty().getStringList("BountyList");
+		
+		if(!bountylist.contains(p.getName())) bountylist.add(p.getName());
+		
+		Main.getBounty().set("BountyList", bountylist);
 		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {			
 			String sql1 = "UPDATE " + Main.DB_TABLE + " SET bounty=" + amount + " WHERE uuid = '" + uuid + "'";
@@ -595,6 +602,11 @@ public class BountyAPI {
 	public static void setBounty(OfflinePlayer p, double amount) {
 		String uuid = p.getUniqueId().toString().replace("-", "");
 		double total = BountyAPI.getTotalBounty(p) + amount;
+		List<String> bountylist = Main.getBounty().getStringList("BountyList");
+		
+		if(!bountylist.contains(p.getName())) bountylist.add(p.getName());
+		
+		Main.getBounty().set("BountyList", bountylist);
 		
 		if(Main.getInstance().getConfig().getBoolean("Database.Enabled")) {			
 			String sql1 = "UPDATE " + Main.DB_TABLE + " SET bounty=" + amount + " WHERE uuid = '" + uuid + "'";

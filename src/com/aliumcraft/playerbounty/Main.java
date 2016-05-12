@@ -260,7 +260,7 @@ public class Main extends JavaPlugin {
 		return getConfig().getStringList(string);
 	}
 	
-	public FileConfiguration getBounty() {
+	public static FileConfiguration getBounty() {
 		return bounty;
 	}
 

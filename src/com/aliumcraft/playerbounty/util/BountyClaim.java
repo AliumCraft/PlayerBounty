@@ -94,7 +94,7 @@ public class BountyClaim implements Listener {
 	private void bountyClaim(Player killer, Player killed) {
 		String amount = NumberFormatting.format(BountyAPI.getBounty(killed));
 		Double amountD = BountyAPI.getBounty(killed);
-		List<String> bountyList = plugin.getBounty().getStringList("BountyList");
+		List<String> bountyList = Main.getBounty().getStringList("BountyList");
 		
 		if(amountD >= plugin.getConfig().getDouble("Bounty.Min-Bounty-Kill-Broadcast")) {
 			if(plugin.getConfig().getBoolean("Enabled.BountyClaimBroadcast")) {

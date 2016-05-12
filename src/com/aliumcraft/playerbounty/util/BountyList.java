@@ -34,7 +34,7 @@ public class BountyList implements Listener {
 	@SuppressWarnings("deprecation")
 	public Inventory InventoryItems(int page, Player p) {
 		int x;
-		List<String> configL = plugin.getBounty().getStringList("BountyList");
+		List<String> configL = Main.getBounty().getStringList("BountyList");
 		
 		int pageNum = page +1;
 		String pageTitle = plugin.getString("Inventory.Name").replace("%page%", String.valueOf(pageNum));

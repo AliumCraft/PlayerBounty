@@ -80,7 +80,7 @@ public class Commands implements CommandExecutor {
 					if(args.length == 3) {
 						try {
 							if(Double.valueOf(args[2]) >= plugin.getConfig().getDouble("Bounty.Min-Bounty-Increase")) {
-								List<String> inv = plugin.getBounty().getStringList("BountyList");
+								List<String> inv = Main.getBounty().getStringList("BountyList");
 								Player z = p.getServer().getPlayer(args[1]);
 								
 								if(z != null) {
@@ -93,7 +93,7 @@ public class Commands implements CommandExecutor {
 													
 													if(!inv.contains(z.getName())) {
 														inv.add(z.getName());
-														plugin.getBounty().set("BountyList", inv);
+														Main.getBounty().set("BountyList", inv);
 														plugin.saveBounty();
 													}
 													
@@ -134,7 +134,7 @@ public class Commands implements CommandExecutor {
 												
 												if(!inv.contains(z.getName())) {
 													inv.add(z.getName());
-													plugin.getBounty().set("BountyList", inv);
+													Main.getBounty().set("BountyList", inv);
 													plugin.saveBounty();
 												}
 												

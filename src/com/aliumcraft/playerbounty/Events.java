@@ -77,7 +77,7 @@ public class Events implements Listener {
 		}
 	}
 	
-	private void schedule(Player p) {
+	private void schedule(final Player p) {
 		if(!bountylist.contains(p.getName())) {
 			bountylist.add(p.getName());
 			
