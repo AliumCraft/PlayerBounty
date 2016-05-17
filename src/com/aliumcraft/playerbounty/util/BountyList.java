@@ -10,8 +10,10 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -30,6 +32,7 @@ public class BountyList implements Listener {
 	public final static int prevPage = 45;
 	
 	public static HashMap<Player, Integer> myPage = new HashMap<Player, Integer>();
+	private HashMap<Player,Boolean> hasInvOpen = new HashMap<Player,Boolean>();
 	
 	@SuppressWarnings("deprecation")
 	public Inventory InventoryItems(int page, Player p) {
@@ -203,27 +206,16 @@ public class BountyList implements Listener {
 		if(c == null) return;
 		if(!c.hasItemMeta()) return;
 		
+		if(inv.getType() == InventoryType.PLAYER) {
+			if(hasInvOpen.containsKey(p)) {
+				if(hasInvOpen.get(p)) {
+					e.setCancelled(true);
+				}
+			}
+		}
+		
 		if(inv.getName().contains(invTitle)) {
 			e.setCancelled(true);
-
-			if(e.getAction() == InventoryAction.DROP_ALL_CURSOR) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.DROP_ONE_CURSOR) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.COLLECT_TO_CURSOR) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.DROP_ALL_SLOT) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.DROP_ONE_SLOT) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.HOTBAR_MOVE_AND_READD) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.HOTBAR_SWAP) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.NOTHING) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.PICKUP_ALL) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.PICKUP_HALF) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.PICKUP_ONE) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.PICKUP_SOME) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.PLACE_ALL) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.PLACE_ONE) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.PLACE_SOME) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.SWAP_WITH_CURSOR) e.setCancelled(true);
-			if(e.getAction() == InventoryAction.UNKNOWN) e.setCancelled(true);
 			
 			if(c.getType() == Material.PAPER) {
 				int currentPage = myPage.get(p);
@@ -237,6 +229,36 @@ public class BountyList implements Listener {
 					p.openInventory(page);
 					myPage.put(p, currentPage+1);
 				}
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onInvOpen(InventoryOpenEvent e) {
+		if(e.getPlayer() instanceof Player) {
+			Player p = (Player) e.getPlayer();
+			String pageTitle = "&9Bounty Page: &5&l%page%";
+			String invTitle = ChatColor.translateAlternateColorCodes('&', pageTitle
+					.replace("%page%", ""));
+			Inventory inv = e.getInventory();
+			
+			if(inv.getName().equals(invTitle)) {
+				hasInvOpen.put(p, true);
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onInvClose(InventoryCloseEvent e) {
+		if(e.getPlayer() instanceof Player) {
+			Player p = (Player) e.getPlayer();
+			String pageTitle = "&9Bounty Page: &5&l%page%";
+			String invTitle = ChatColor.translateAlternateColorCodes('&', pageTitle
+					.replace("%page%", ""));
+			Inventory inv = e.getInventory();
+			
+			if(inv.getName().equals(invTitle)) {
+				hasInvOpen.put(p, false);
 			}
 		}
 	}
