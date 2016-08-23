@@ -1,5 +1,5 @@
 package com.aliumcraft.playerbounty.listeners;
 
-public class ClaimListeners {
+public class ClaimListeners extends ListenerBase {
 
 }
