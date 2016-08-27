@@ -111,6 +111,7 @@ public class BountyAdd extends BountyBase {
 		}
 		
 		c.set("Amount", current);
+		c.set("HasBounty", true);
 		Main.econ.withdrawPlayer(commandSender, amount);
 		plugin.saveFile(f, c);
 		

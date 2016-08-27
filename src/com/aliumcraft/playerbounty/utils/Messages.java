@@ -9,6 +9,7 @@ public enum Messages {
 	NoPermission("Messages.NoPermission", "&c&l(!) &7You do not have access to that command!"),
 	MustBePlayer("Messages.MustBePlayer", "&c&l(!) &7You must be a player to use this command!"),
 	MoneyTaken("Messages.MoneyTaken", "&c&l- ${amount}"),
+	Reload("Messages.Reload", "&6&l(!) &7You have successfully reloaded all the files! &6&l(!)"),
 	BountyGet_NoBounty("Messages.BountyGet.NoBounty", "&6&l(!) &7{name} has no bounty on their head. &6&l(!)"),
 	BountyGet_Get("Messages.BountyGet.Get", "&6&l(!) &7{name} has a &f${amount} &7bounty on their head. &6&l(!)"),
 	BountyGet_Disabled("Messages.BountyGet.Disabled", "&c&l(!) &7The bounty get feature is disabled! &c&l(!)"),

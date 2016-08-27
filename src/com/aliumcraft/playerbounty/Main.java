@@ -132,7 +132,7 @@ public class Main extends JavaPlugin {
 			c.set("TotalBounty", 0);
 			c.set("BountiesClaimed", 0);
 			c.set("BountyStreak", 0);
-			
+			c.set("HasBounty", false);
 		}
 		
 		saveFile(f, c);

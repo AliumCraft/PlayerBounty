@@ -43,6 +43,8 @@ public class ConfigYML {
 		c.addDefault("Features.HeadDrops", true);
 		c.addDefault("Features.BountyParticles", true);
 		c.addDefault("Features.BountyGet", true);
+		c.addDefault("Features.BountyGUI.Enabled", true);
+		c.addDefault("Features.BountyGUI.ShowOffline", false);
 		
 		c.addDefault("HeadDrops.Name", "&fSkull of &b&l{p}");
 		c.addDefault("HeadDrops.Lore", (List<String>) Arrays.asList(
@@ -52,9 +54,27 @@ public class ConfigYML {
 				"&7to claim a bounty worth",
 				"&a$&f{a}&7."));
 		
+		c.addDefault("BountyGUI.Name", "&9Bounties Page: &6&l{page}");
+		loadItemStack(c, "Divider", "102", "&f", (List<String>) Arrays.asList(""));
+		loadItemStack(c, "Heads", "397:3", "&fSkull of &b{p}", (List<String>) Arrays.asList(
+				"&dAmount: &b${amount}",
+				"&7Kill this player to collect the reward.",
+				"",
+				"{status}"));
+		loadItemStack(c, "NextPage", "339", "&e&lNext Page ->", (List<String>) Arrays.asList(""));
+		loadItemStack(c, "PrevPage", "339", "&e&l<- Previous Page", (List<String>) Arrays.asList(""));
+		
 		c.options().copyDefaults(true);
 		
 		plugin.saveConfig();
 		plugin.reloadConfig();
+	}
+	
+	private static void loadItemStack(FileConfiguration c, String filePath, String type, String name, List<String> lore) {
+		String path = "BountyGUI." + filePath + ".";
+		
+		c.addDefault(path + "Item", type);
+		c.addDefault(path + "Name", name);
+		c.addDefault(path + "Lore", lore);
 	}
 }

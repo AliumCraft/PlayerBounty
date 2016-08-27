@@ -1,16 +1,22 @@
 package com.aliumcraft.playerbounty.cmds;
 
+import java.util.Random;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.kcpdev.utils.commands.CommandUtils;
 
+import com.aliumcraft.playerbounty.Main;
 import com.aliumcraft.playerbounty.cmds.management.BountyAdd;
+import com.aliumcraft.playerbounty.cmds.management.BountyBase;
 import com.aliumcraft.playerbounty.cmds.management.BountyGet;
 import com.aliumcraft.playerbounty.utils.Messages;
 import com.aliumcraft.playerbounty.utils.Permissions;
 
-public class BountyCmd implements CommandUtils {
+public class BountyCmd extends BountyBase implements CommandUtils {
+	
+	private Main plugin = Main.getInstance();
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -50,7 +56,13 @@ public class BountyCmd implements CommandUtils {
 		if(args[0].equalsIgnoreCase("list") && args.length == 1) {
 			if(!checkIfSenderIsPlayer(sender)) return false;
 			
+			Random rand = new Random();
+			int randNum = rand.nextInt(200);
+			double randNumD = randNum + rand.nextDouble();
 			
+			System.out.println(randNumD);
+			System.out.println("ROUNDS TO " + Math.round(randNumD));
+			System.out.println("CEILS TO " + Math.ceil(randNumD));
 		}
 		
 		
@@ -87,24 +99,51 @@ public class BountyCmd implements CommandUtils {
 		
 		/* RELOAD */
 		if(args[0].equalsIgnoreCase("reload") && args.length == 1) {
+			if(!sender.hasPermission(Permissions.Admin.getPerm())) {
+				Messages.NoPermission.msg(sender);
+				return false;
+			}
 			
+			plugin.reloadFiles();
+			Messages.Reload.msg(sender);
+			return true;
 		}
 		
 		
 		/* TAKE */
 		if(args[0].equalsIgnoreCase("take") && args.length == 3) {
+			if(!sender.hasPermission(Permissions.Admin.getPerm())) {
+				Messages.NoPermission.msg(sender);
+				return false;
+			}
 			
 		}
 			
 		
 		/* SET */
 		if(args[0].equalsIgnoreCase("set") && args.length == 3) {
+			if(!sender.hasPermission(Permissions.Admin.getPerm())) {
+				Messages.NoPermission.msg(sender);
+				return false;
+			}
 			
 		}
 			
 		sendHelpMessage(sender);
 		
 		return true;
+	}
+
+	@Override
+	public boolean checkForErrors() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
