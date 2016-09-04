@@ -20,7 +20,8 @@ public enum Messages {
 	BountyAdd_Set("Messages.BountyAdd.Add", "&6&l(!) &7{sender} has set a bounty on {p} for &f${amount}! &6&l(!)"),
 	BountyAdd_Inc("Messages.BountyAdd.Increase", "&6&l(!) &7{sender} has increased the bounty on {p} to &f${amount} &6&l(!)"),
 	BountyAdd_MinInc("Messages.BountyAdd.MinIncrease", "&c&l(!) &7The minimum amount of money you can increase with is &f${amount}!"),
-	BountyAdd_NotEnoughMoney("Messages.BountyAdd.NotEnoughMoney", "&c&l(!) &7You do not have enough money to add this bounty!");
+	BountyAdd_NotEnoughMoney("Messages.BountyAdd.NotEnoughMoney", "&c&l(!) &7You do not have enough money to add this bounty!"),
+	BountyList_NoBounties("Messages.BountyList.NoBounties", "&c&l(!) &7There is no current bounties to display!");
 	
 	private String path;
 	private String message;

@@ -1,7 +1,9 @@
 package com.aliumcraft.playerbounty.inventories;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,40 +15,78 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.Plugin;
+import org.kitteh.vanish.staticaccess.VanishNoPacket;
+import org.kitteh.vanish.staticaccess.VanishNotLoadedException;
 
 import com.aliumcraft.playerbounty.Main;
+import com.aliumcraft.playerbounty.utils.Messages;
 
+@SuppressWarnings("deprecation")
 public class BountyListInv extends InventoryBase {
 	
-	private static Main plugin = Main.getInstance();
-	private static String name = plugin.getConfig().getString("BountyGUI.Name");
+	public BountyListInv(Player p) {
+		this.p = p;
+		this.name = plugin.getConfig().getString("BountyGUI.Name");
+		
+		fillHashMaps();
+	}
+	
+	private final Player p;
+	private Main plugin = Main.getInstance();
+	private String name;
 	private Map<Integer,Inventory> mapOfPages = new HashMap<Integer,Inventory>();
-	private Map<OfflinePlayer,Double> offlineBounties = new HashMap<OfflinePlayer,Double>();
-	private Map<Player,Double> onlineBounties = new HashMap<Player,Double>();
+	private Map<OfflinePlayer,Double> playersWithBounties = new HashMap<OfflinePlayer,Double>();
+	private Map<Player,Integer> currentlyOpenPage = new HashMap<Player,Integer>();
 	private final int prevPage = 45;
 	private final int nextPage = 53;
 	private final int[] dividers = {45,46,47,48,49,50,51,52,53};
 	private int amountOfBounties;
-	public boolean isThereAnyBounties = false;
+	private boolean isThereAnyBounties = false;
 	
-	public void InitialCall() {
-		ItemStack divider = getItemStackFromFile(plugin.getConfig(), "BountyGUI.Divider");
-		ItemStack nPage = getItemStackFromFile(plugin.getConfig(), "BountyGUI.NextPage");
-		ItemStack pPage = getItemStackFromFile(plugin.getConfig(), "BountyGUI.PrevPage");
-		ItemStack headBase = getItemStackFromFile(plugin.getConfig(), "BountyGUI.Heads");
+	private void fillHashMaps() {
+		File dir = plugin.getBountyFile();
+		File[] dirContent = dir.listFiles();
+		
+		for(File child : dirContent) {
+			FileConfiguration c = YamlConfiguration.loadConfiguration(child);
+			
+			if(!c.contains("HasBounty")) continue;
+			if(!c.getBoolean("HasBounty")) continue;
+			String name = child.getName().replace(".yml", "");
+			UUID uuid = UUID.fromString(name);
+			double amount = c.getDouble("Amount");
+			
+			playersWithBounties.put(Bukkit.getOfflinePlayer(uuid), amount);
+		}
+		
+		getAmountOfBountiesInHashMap();
+	}
+	
+	private void getAmountOfBountiesInHashMap() {
+		int a = playersWithBounties.size();
+		
+		amountOfBounties = a;
+		
+		createBountyListInventory();
+	}
+	
+	private void createBountyListInventory() {
+		ItemStack divider = getItemStackFromFile(plugin.getConfig(), "BountyGUI.Divider.");
+		ItemStack nPage = getItemStackFromFile(plugin.getConfig(), "BountyGUI.NextPage.");
+		ItemStack pPage = getItemStackFromFile(plugin.getConfig(), "BountyGUI.PrevPage.");
+		double pages = amountOfBounties / 45;
+		if(pages == 0.0D) pages = 1.0D;
 		int amountOfPages = 0;
 		
-		populateHashMaps();
-		getAmountOfBounties();
-		
-		double pages = amountOfBounties / 45;
 		amountOfPages = (int) Math.ceil(pages);
 		int i = 0;
 		
 		do {
 			i++;
 			
-			mapOfPages.put(i, Bukkit.createInventory(null, 54, name.replace("{page}", ""+i)));
+			mapOfPages.put(i, Bukkit.createInventory(null, 54, ChatColor.translateAlternateColorCodes('&', name.replace("{page}", ""+i))));
 			Inventory inv = mapOfPages.get(i);
 			
 			for(int d : dividers) {
@@ -58,40 +98,77 @@ public class BountyListInv extends InventoryBase {
 			
 		} while(i <= (amountOfPages - 1));
 		
-		if((!offlineBounties.isEmpty()) || (!onlineBounties.isEmpty())) {
-			isThereAnyBounties = true;
-		}
+		populateInventoryWithHeads();
 	}
 	
-	private void populateHashMaps() {
-		File dir = plugin.getBountyFile();
-		File[] dirContent = dir.listFiles();
+	private void populateInventoryWithHeads() {
+		int num = 0;
+		ItemStack headBase = getItemStackFromFile(plugin.getConfig(), "BountyGUI.Heads.");
 		
-		for(File child : dirContent) {
-			FileConfiguration c = YamlConfiguration.loadConfiguration(child);
+		for(OfflinePlayer p : playersWithBounties.keySet()) {
+			if(p.isOnline()) {
+				Player op = Bukkit.getPlayer(p.getUniqueId());
+				
+				if(!this.p.canSee(op)) continue;
+				Plugin plugin = Bukkit.getPluginManager().getPlugin("VanishNoPacket");
+				
+				if(plugin != null && plugin.isEnabled()) {
+					try {
+						if(VanishNoPacket.getManager().isVanished(op)) continue;
+					} catch (VanishNotLoadedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 			
-			if(!c.contains("HasBounty")) continue;
-			if(!c.getBoolean("HasBounty")) continue;
-			UUID uuid = UUID.fromString(child.getName());
-			Player p = Bukkit.getPlayer(uuid);
-			double amount = c.getDouble("Amount");
-			boolean isOnline = (p != null) ? true : false;
+			num++;
 			
-			if(isOnline) onlineBounties.put(p, amount);
-			else offlineBounties.put(Bukkit.getOfflinePlayer(uuid), amount);
+			int i = num / 45;
+			if(i == 0) i = 1;
+			
+			ItemStack playerItemStack = getPlayerHead(p, headBase);
+			mapOfPages.get(i).addItem(playerItemStack);
 		}
-	}
-	
-	private void getAmountOfBounties() {
-		int a = onlineBounties.size();
-		int b = offlineBounties.size();
 		
-		amountOfBounties = (a + b);
+		if(!playersWithBounties.isEmpty()) isThereAnyBounties = true;
+	}
+	
+	private ItemStack getPlayerHead(OfflinePlayer p, ItemStack base) {
+		ItemStack is = base.clone();
+		SkullMeta im = (SkullMeta) is.getItemMeta();
+		String name = im.getDisplayName();
+		String playerName = p.getName();
+		double bountyAmount = playersWithBounties.get(p);
+		List<String> currentLore = im.getLore();
+		List<String> newLore = new ArrayList<String>();
+		Player onlineStatusPlayer = Bukkit.getPlayer(p.getUniqueId());
+		boolean onlineStatus = (onlineStatusPlayer == null) ? false : true;
+		
+		im.setOwner(playerName);
+		im.setDisplayName(name.replace("{p}", playerName));
+		
+		for(String s : currentLore) {
+			if(s.contains("{amount}")) s = s.replace("{amount}", plugin.format(bountyAmount));
+			if(s.contains("{status}") && onlineStatus) s = s.replace("{status}", ChatColor.translateAlternateColorCodes('&', "&a&lONLINE"));
+			if(s.contains("{status}") && !onlineStatus) s = s.replace("{status}", ChatColor.translateAlternateColorCodes('&', "&c&lOFFLINE"));
+			
+			newLore.add(s);
+		}
+		
+		im.setLore(newLore);
+		is.setItemMeta(im);
+		
+		return is;
 	}
 	
 	
-	public static void openInventory(Player p) {
-		//p.openInventory(inv);
+	public void openInventory(int page) {		
+		if(!isThereAnyBounties) {
+			Messages.BountyList_NoBounties.msg(p);
+			return;
+		}
+		
+		p.openInventory(mapOfPages.get(page));
+		currentlyOpenPage.put(p, page);
 	}
-	
 }

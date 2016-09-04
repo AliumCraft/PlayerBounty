@@ -109,10 +109,6 @@ public class Main extends JavaPlugin {
 		return bountyF;
 	}
 	
-	public File getBountyFile(Player p) {
-		return new File(getBountyFile(), p.getUniqueId().toString() + ".yml");
-	}
-	
 	public File getBountyFile(OfflinePlayer p) {
 		return new File(getBountyFile(), p.getUniqueId().toString() + ".yml");
 	}

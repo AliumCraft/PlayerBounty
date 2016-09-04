@@ -1,13 +1,10 @@
 package com.aliumcraft.playerbounty.cmds.management;
 
-import java.io.File;
-
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.aliumcraft.playerbounty.Main;
+import com.aliumcraft.playerbounty.api.BountyManagement;
 import com.aliumcraft.playerbounty.utils.Messages;
 
 @SuppressWarnings("deprecation")
@@ -17,16 +14,15 @@ public class BountyAdd extends BountyBase {
 	private String targetPlayerName;
 	private int amount;
 	private Player targetPlayer;
-	private File f;
-	private FileConfiguration c;
 	private double playerBalance;
+	private BountyManagement bm;
 	
 	public BountyAdd(Player sender, String args, int amount) {
 		this.commandSender = sender;
 		this.targetPlayerName = args;
 		this.targetPlayer = Bukkit.getPlayer(args);
 		this.amount = amount;
-		playerBalance = Main.econ.getBalance(sender);
+		this.playerBalance = Main.econ.getBalance(sender);
 	}
 
 	@Override
@@ -46,12 +42,11 @@ public class BountyAdd extends BountyBase {
 			return false;
 		}
 		
-		f = plugin.getBountyFile(targetPlayer);
-		c = YamlConfiguration.loadConfiguration(f);
+		this.bm = new BountyManagement(targetPlayer);
 		
-		int current = c.getInt("Amount");
-		int sum = current + amount;
-		int min = getMinBounty();
+		double current = bm.getBounty();
+		double sum = current + amount;
+		double min = getMinBounty();
 		
 		if(sum >= getMaxBounty()) {
 			Messages.BountyAdd_Max.msg(commandSender);
@@ -82,7 +77,7 @@ public class BountyAdd extends BountyBase {
 	@Override
 	public void run() {	
 		String msg;
-		int current = c.getInt("Amount");
+		double current = this.bm.getBounty();
 		
 		if(current == 0) {
 			current += amount;
@@ -110,10 +105,8 @@ public class BountyAdd extends BountyBase {
 			}
 		}
 		
-		c.set("Amount", current);
-		c.set("HasBounty", true);
+		bm.addBounty(amount);
 		Main.econ.withdrawPlayer(commandSender, amount);
-		plugin.saveFile(f, c);
 		
 		msg = Messages.MoneyTaken.toString();
 		msg = msg.replace("{amount}", plugin.format(amount));

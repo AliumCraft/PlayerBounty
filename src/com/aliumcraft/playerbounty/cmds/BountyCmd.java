@@ -1,7 +1,5 @@
 package com.aliumcraft.playerbounty.cmds;
 
-import java.util.Random;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,6 +9,7 @@ import com.aliumcraft.playerbounty.Main;
 import com.aliumcraft.playerbounty.cmds.management.BountyAdd;
 import com.aliumcraft.playerbounty.cmds.management.BountyBase;
 import com.aliumcraft.playerbounty.cmds.management.BountyGet;
+import com.aliumcraft.playerbounty.cmds.management.BountyList;
 import com.aliumcraft.playerbounty.utils.Messages;
 import com.aliumcraft.playerbounty.utils.Permissions;
 
@@ -56,13 +55,11 @@ public class BountyCmd extends BountyBase implements CommandUtils {
 		if(args[0].equalsIgnoreCase("list") && args.length == 1) {
 			if(!checkIfSenderIsPlayer(sender)) return false;
 			
-			Random rand = new Random();
-			int randNum = rand.nextInt(200);
-			double randNumD = randNum + rand.nextDouble();
+			BountyList bl = new BountyList((Player) sender);
+			if(!bl.checkForErrors()) return false;
+			bl.run();
 			
-			System.out.println(randNumD);
-			System.out.println("ROUNDS TO " + Math.round(randNumD));
-			System.out.println("CEILS TO " + Math.ceil(randNumD));
+			return true;
 		}
 		
 		
@@ -92,7 +89,6 @@ public class BountyCmd extends BountyBase implements CommandUtils {
 		/* STREAK */
 		if(args[0].equalsIgnoreCase("streak") && (args.length == 1 || args.length == 2)) {
 			if(!checkIfSenderIsPlayer(sender)) return false;
-			
 			
 		}
 		
@@ -136,14 +132,10 @@ public class BountyCmd extends BountyBase implements CommandUtils {
 
 	@Override
 	public boolean checkForErrors() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void run() {}
 	
 }
