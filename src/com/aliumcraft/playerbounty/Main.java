@@ -16,7 +16,6 @@ import com.aliumcraft.playerbounty.cmds.BountyCmd;
 import com.aliumcraft.playerbounty.listeners.ClaimListeners;
 import com.aliumcraft.playerbounty.listeners.FileManagerListeners;
 import com.aliumcraft.playerbounty.listeners.ParticleListeners;
-import com.aliumcraft.playerbounty.listeners.StreakListeners;
 import com.aliumcraft.playerbounty.utils.Messages;
 import com.aliumcraft.playerbounty.ymls.ConfigYML;
 import com.aliumcraft.playerbounty.ymls.MessagesYML;
@@ -47,7 +46,6 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(new FileManagerListeners(), this);
 		pm.registerEvents(new ClaimListeners(), this);
 		pm.registerEvents(new ParticleListeners(), this);
-		pm.registerEvents(new StreakListeners(), this);
 		
 		getCommand("bounty").setExecutor(new BountyCmd());
 	}
@@ -137,5 +135,13 @@ public class Main extends JavaPlugin {
 	public String format(double value) {
 	    DecimalFormat df = new DecimalFormat("###,###,###,###,###,###,###.##");
 	    return df.format(value);
+	}
+	
+	public String formatTime(int time) {
+		time /= 60;
+		DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(2);
+		
+		return df.format(time);
 	}
 }

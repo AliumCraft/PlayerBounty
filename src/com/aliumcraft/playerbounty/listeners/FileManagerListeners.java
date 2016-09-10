@@ -4,6 +4,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import com.aliumcraft.playerbounty.utils.ListenerBase;
+
 public class FileManagerListeners extends ListenerBase {
 
 	@EventHandler

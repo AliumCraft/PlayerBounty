@@ -24,13 +24,19 @@ public class MessagesYML {
 			c.addDefault(m.getPath(), m.getMessage());
 		}
 		
+		c.addDefault("Messages.BountyClaim", (List<String>) Arrays.asList(
+				"&7",
+				"&5&l(!) &f%player% &7claimed a bounty of &f$%amount% &7pm &f%bounty%! &5&l(!)",
+				"&7"));
+		
 		c.addDefault("Messages.Help", (List<String>) Arrays.asList(
 				"&e&m---------------&b&l PlayerBounty &e&m---------------",
 				"&f/bounty get {player} &7- Gets the current bounty amount someone has on their head.",
 				"&f/bounty list &7- Opens a GUI which displays all bounties.",
 				"&f/bounty add {player} {amount} &7- Increases/sets a bounty on someone.",
 				"&f/bounty timer &7- Displays the time left for your bounty to expire.",
-				"&f/bounty streak {player} &7-Shows you what someone's bounty streak is.",
+				"&f/bounty streak {player} &7- Shows you what someone's bounty streak is.",
+				"&f/bounty rewards &7- Displays all the rewards you can get and for hitting what bounty streak.",
 				"&c/bounty reload &7- Reloads all the yml files for this plugin.",
 				"&c/bounty take {player} {amount} &7- Silently takes the amount from that players bounty.",
 				"&c/bounty set {player} {amount} &7-Silently sets someone's bounty.",

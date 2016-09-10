@@ -18,27 +18,18 @@ public class ConfigYML {
 				  "\n"
 				+ "PlayerBounty created by AliumCraft.\n"
 				+ "\n"
-				+ "Database: Input all info for a database here.\n"
 				+ "Settings: where you can configure everything\n"
 				+ "Features: where you enable or disable features on the plugin.\n"
 				+ "HeadDrops: Customization towards heads dropping when bounties claimed.\n"
 				+ "BountyStreak: Manage all the streak info in this section.\n");
-		
-		c.addDefault("Database.Enabled", false);
-		c.addDefault("Database.Host", "localhost");
-		c.addDefault("Database.Port", "3306");
-		c.addDefault("Database.Name", "sql_bukkit");
-		c.addDefault("Database.Table", "playerbounty");
-		c.addDefault("Database.User", "root");
-		c.addDefault("Database.Pass", "");
-		
+			
 		c.addDefault("Settings.MinBounty", 100);
 		c.addDefault("Settings.MaxBounty", 10000000);
 		c.addDefault("Settings.MinBountyToBroadcast", 1000);
 		c.addDefault("Settings.MinBountyIncrease", 100);
-		c.addDefault("Settings.BountyExpire", true);
 		c.addDefault("Settings.BountyExpireTime", 3600);
 		
+		c.addDefault("Features.BountyTimer", false);
 		c.addDefault("Features.BountyStreak", true);
 		c.addDefault("Features.HeadDrops", true);
 		c.addDefault("Features.BountyParticles", true);
@@ -63,6 +54,19 @@ public class ConfigYML {
 				"{status}"));
 		loadItemStack(c, "NextPage", "339", "&e&lNext Page ->", (List<String>) Arrays.asList(""));
 		loadItemStack(c, "PrevPage", "339", "&e&l<- Previous Page", (List<String>) Arrays.asList(""));
+		
+		c.addDefault("BountyStreaks.1.Cash", 0.00D);
+		c.addDefault("BountyStreaks.1.Items.1.Type", "162:0");
+		c.addDefault("BountyStreaks.1.Items.1.Amount", 5);
+		c.addDefault("BountyStreaks.1.Items.1.Name", "");
+		c.addDefault("BountyStreaks.1.Items.1.Lore", (List<String>) Arrays.asList(""));
+
+		c.addDefault("BountyStreaks.1.Items.2.Type", "162:0");
+		c.addDefault("BountyStreaks.1.Items.2.Amount", 5);
+		c.addDefault("BountyStreaks.1.Items.2.Name", "");
+		c.addDefault("BountyStreaks.1.Items.2.Lore", (List<String>) Arrays.asList(""));
+		
+		c.addDefault("StreakBroadcasts", (List<String>) Arrays.asList("1", "5", "7", "10"));
 		
 		c.options().copyDefaults(true);
 		
