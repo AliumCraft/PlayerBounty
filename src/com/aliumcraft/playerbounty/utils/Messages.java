@@ -38,7 +38,8 @@ public enum Messages {
 	BountyRewards_Filler4("Messages.BountyRewards.Filler4", "    &7- &f{am}x &7{item}(s)"),
 	BountyRewards_Footer("Messages.BountyRewards.Footer", "&6▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"),
 	BountyRewards_Spacer("Messages.BountyRewards.Spacer", "&7"),
-	BountyStreaks_BroadcastMessage("Messages.BountyStreaksMessage", "&6&l(!) &f%player% &7has reached a bounty kill streak of &f{x}&7! &6&l(!)");
+	BountyStreaks_BroadcastMessage("Messages.BountyStreaksMessage", "&6&l(!) &f%player% &7has reached a bounty kill streak of &f{x}&7! &6&l(!)"),
+	BountyClaim_InvalidArea("Messages.InvalidAreaToClaim", "&c&l(!) &eYou would claimed a bounty on &f%player% &efor &f$%amount% &ebut you did not kill them in a correct area!");
 	
 	private String path;
 	private String message;

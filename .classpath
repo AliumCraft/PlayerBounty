@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="B:/temp/workspace/libs/worldedit-bukkit-6.1.jar"/>
 	<classpathentry kind="lib" path="B:/temp/workspace/libs/worldguard-6.1.jar"/>
 	<classpathentry kind="lib" path="B:/temp/workspace/libs/VanishNoPacket.jar"/>
+	<classpathentry kind="lib" path="B:/temp/workspace/libs/PlaceholderAPI.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

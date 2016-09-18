@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.kcpdev.utils.WorldGuardUtils;
 
 import com.aliumcraft.playerbounty.Main;
 import com.aliumcraft.playerbounty.api.BountyManagement;
@@ -38,6 +39,28 @@ public class ClaimListeners extends ListenerBase {
 		BountyManagement bm = new BountyManagement(killed);
 		double amount = bm.getBounty();
 		String formattedAmount = plugin.format(amount);
+		
+		if(plugin.getConfig().getBoolean("Features.ClaimOnlyInRegions")) {
+			WorldGuardUtils wgUtils = new WorldGuardUtils();
+			List<String> regionsPlayerDiedIn = wgUtils.getRegionNames(killed);
+			List<String> regionsNeedsToDieIn = plugin.getConfig().getStringList("RegionsToClaimIn");
+			boolean didPlayerDieInACorrectRegion = false;
+			
+			for(String s : regionsPlayerDiedIn) {
+				if(regionsNeedsToDieIn.contains(s)) {
+					didPlayerDieInACorrectRegion = true;
+				}
+			}
+			
+			if(!didPlayerDieInACorrectRegion) {
+				String msg = Messages.BountyClaim_InvalidArea.toString();
+				msg = msg.replace("%player%", killed.getName());
+				msg = msg.replace("%amount%", formattedAmount);
+				
+				killer.sendMessage(msg);
+				return;
+			}
+		}
 		
 		if(amount == 0.0D) return;
 		

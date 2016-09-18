@@ -16,14 +16,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.plugin.Plugin;
-import org.kitteh.vanish.staticaccess.VanishNoPacket;
-import org.kitteh.vanish.staticaccess.VanishNotLoadedException;
 
 import com.aliumcraft.playerbounty.Main;
 import com.aliumcraft.playerbounty.utils.Messages;
 
-@SuppressWarnings("deprecation")
 public class BountyListInv extends InventoryBase {
 	
 	public BountyListInv(Player p) {
@@ -38,7 +34,6 @@ public class BountyListInv extends InventoryBase {
 	private String name;
 	private Map<Integer,Inventory> mapOfPages = new HashMap<Integer,Inventory>();
 	private Map<OfflinePlayer,Double> playersWithBounties = new HashMap<OfflinePlayer,Double>();
-	private Map<Player,Integer> currentlyOpenPage = new HashMap<Player,Integer>();
 	private final int prevPage = 45;
 	private final int nextPage = 53;
 	private final int[] dividers = {45,46,47,48,49,50,51,52,53};
@@ -110,15 +105,6 @@ public class BountyListInv extends InventoryBase {
 				Player op = Bukkit.getPlayer(p.getUniqueId());
 				
 				if(!this.p.canSee(op)) continue;
-				Plugin plugin = Bukkit.getPluginManager().getPlugin("VanishNoPacket");
-				
-				if(plugin != null && plugin.isEnabled()) {
-					try {
-						if(VanishNoPacket.getManager().isVanished(op)) continue;
-					} catch (VanishNotLoadedException e) {
-						e.printStackTrace();
-					}
-				}
 			}
 			
 			num++;
@@ -169,6 +155,10 @@ public class BountyListInv extends InventoryBase {
 		}
 		
 		p.openInventory(mapOfPages.get(page));
-		currentlyOpenPage.put(p, page);
+		plugin.currentlyOpenPage.put(p, page);
+	}
+	
+	public int getPage() {
+		return plugin.currentlyOpenPage.get(p);
 	}
 }

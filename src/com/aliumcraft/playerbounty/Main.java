@@ -2,6 +2,8 @@ package com.aliumcraft.playerbounty;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -15,6 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.aliumcraft.playerbounty.cmds.BountyCmd;
 import com.aliumcraft.playerbounty.listeners.ClaimListeners;
 import com.aliumcraft.playerbounty.listeners.FileManagerListeners;
+import com.aliumcraft.playerbounty.listeners.InventoryListeners;
 import com.aliumcraft.playerbounty.listeners.ParticleListeners;
 import com.aliumcraft.playerbounty.utils.Messages;
 import com.aliumcraft.playerbounty.ymls.ConfigYML;
@@ -30,6 +33,7 @@ public class Main extends JavaPlugin {
 	private FileConfiguration messagesConf;
 	private File configF = new File(getDataFolder(), "config.yml");
 	public static Economy econ = null;
+	public Map<Player,Integer> currentlyOpenPage = new HashMap<Player,Integer>();
 	
 	public void onEnable() {
 		instance = this;
@@ -46,6 +50,7 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(new FileManagerListeners(), this);
 		pm.registerEvents(new ClaimListeners(), this);
 		pm.registerEvents(new ParticleListeners(), this);
+		pm.registerEvents(new InventoryListeners(), this);
 		
 		getCommand("bounty").setExecutor(new BountyCmd());
 	}

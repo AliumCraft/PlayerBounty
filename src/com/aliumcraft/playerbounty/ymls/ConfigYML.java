@@ -29,6 +29,9 @@ public class ConfigYML {
 		c.addDefault("Settings.MinBountyIncrease", 100);
 		c.addDefault("Settings.BountyExpireTime", 3600);
 		
+		c.addDefault("RegionsToClaimIn", (List<String>) Arrays.asList("spawn"));
+		
+		c.addDefault("Features.ClaimOnlyInRegions", true);
 		c.addDefault("Features.BountyTimer", false);
 		c.addDefault("Features.BountyStreak", true);
 		c.addDefault("Features.HeadDrops", true);
